@@ -1,6 +1,7 @@
 {
   "name": "supabase-comments-x",
   "author": "mustaqim.arifin@gmail.com",
+  "repository": "https://github.com/mustaqimarifin/supabase-comments-x.git",
   "version": "1.0.0",
   "description": "Comments powered by React Query and Supabase",
   "main": "dist/index.js",
@@ -63,16 +64,17 @@
     "@tiptap/html": "^2.0.0-beta.162",
     "@tiptap/react": "^2.0.0-beta.105",
     "@tiptap/starter-kit": "^2.0.0-beta.171",
-    "commander": "^8.3.0",
     "clsx": "^1.1.1",
     "color": "^4.2.0",
+    "commander": "^8.3.0",
     "dayjs": "^1.11.6",
     "lowlight": "^2.4.0",
     "md5": "^2.3.0",
     "pg": "^8.7.1",
     "react-image": "^4.0.3",
     "tippy.js": "^6.3.7",
-    "traverse": "^0.6.6"
+    "traverse": "^0.6.6",
+    "tslib": "^2.4.1"
   },
   "prettier": {
     "printWidth": 80,
@@ -90,6 +92,6 @@
     ]
   },
   "publishConfig": {
-    "access": "public"
+    "@mustaqimarifin:registry": "https://npm.pkg.github.com"
   }
 }

@@ -127,7 +127,7 @@ const CommentData: FC<CommentDataProps> = ({ comment }) => {
   const isReply = !!comment.parent_id;
 
   const activeReactions = comment.reactions_metadata.reduce(
-    (set: { add: (arg0: any) => void; }, reactionMetadata: { active_for_user: any; reaction_type: any; }) => {
+    (set, reactionMetadata) => {
       if (reactionMetadata.active_for_user) {
         set.add(reactionMetadata.reaction_type);
       }
