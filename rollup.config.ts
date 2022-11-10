@@ -1,5 +1,5 @@
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
-import nodeResolve from '@rollup/plugin-node-resolve';
+import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import typescript from 'rollup-plugin-typescript2';
 import postcss from 'rollup-plugin-postcss';
@@ -27,9 +27,9 @@ export default {
   },
   plugins: [
     peerDepsExternal(),
-    nodeResolve(),
+    resolve({ browser: true }),
     json(),
-    commonjs(),
+    commonjs({ transformMixedEsModules: true }),
     typescript({ useTsconfigDeclarationDir: true }),
     postcss({
       config: {

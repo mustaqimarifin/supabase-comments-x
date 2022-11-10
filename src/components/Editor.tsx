@@ -9,7 +9,7 @@ import Placeholder from '@tiptap/extension-placeholder';
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import { Editor as IEditor } from '@tiptap/core';
 
-import styles from './Editor.module.css';
+//import styles from './Editor.module.css';
 // @ts-ignore
 import { lowlight } from 'lowlight';
 import { useCommentsContext } from './CommentsProvider';
@@ -40,9 +40,7 @@ const Editor: FC<EditorProps> = forwardRef(
   ) => {
     const context = useCommentsContext();
     const extensions: any[] = [
-      StarterKit.configure({
-        codeBlock: false,
-      }),
+      StarterKit,
       Placeholder.configure({
         placeholder: 'Write a message...',
       }),
@@ -83,7 +81,7 @@ const Editor: FC<EditorProps> = forwardRef(
     return (
       <div
         className={clsx(
-          readOnly ? styles.viewer : styles.editor,
+          readOnly ? 'viewer' : 'editor',
           'tiptap-editor text-alpha-80 border-alpha-10 rounded-md'
         )}
       >
