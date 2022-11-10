@@ -4,19 +4,20 @@ import commonjs from '@rollup/plugin-commonjs';
 import typescript from 'rollup-plugin-typescript2';
 import postcss from 'rollup-plugin-postcss';
 import json from '@rollup/plugin-json';
-
-const packageJson = require('./package.json');
+import { createRequire } from 'node:module';
+const require = createRequire(import.meta.url);
+const pkg = require('./package.json');
 
 export default {
   input: 'src/index.ts',
   output: [
     {
-      file: packageJson.main,
+      file: pkg.main,
       format: 'cjs',
       sourcemap: true,
     },
     {
-      file: packageJson.module,
+      file: pkg.module,
       format: 'esm',
       sourcemap: true,
     },

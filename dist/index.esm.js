@@ -1,36 +1,9 @@
-'use strict';
-
-Object.defineProperty(exports, '__esModule', { value: true });
-
-var reactQuery = require('react-query');
-var React = require('react');
-var ui = require('@supabase/ui');
-var jsxRuntime = require('react/jsx-runtime');
-var ReactDOM = require('react-dom');
-
-function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-function _interopNamespace(e) {
-    if (e && e.__esModule) return e;
-    var n = Object.create(null);
-    if (e) {
-        Object.keys(e).forEach(function (k) {
-            if (k !== 'default') {
-                var d = Object.getOwnPropertyDescriptor(e, k);
-                Object.defineProperty(n, k, d.get ? d : {
-                    enumerable: true,
-                    get: function () { return e[k]; }
-                });
-            }
-        });
-    }
-    n["default"] = e;
-    return Object.freeze(n);
-}
-
-var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
-var React__namespace = /*#__PURE__*/_interopNamespace(React);
-var ReactDOM__default = /*#__PURE__*/_interopDefaultLegacy(ReactDOM);
+import { useQuery, useQueryClient, QueryClient, QueryClientProvider, useMutation } from 'react-query';
+import * as React from 'react';
+import React__default, { useState, useEffect, useRef, createContext, useContext, useMemo, forwardRef, useImperativeHandle, useLayoutEffect, useCallback } from 'react';
+import { Auth as Auth$1, Space, Input, IconMail, IconKey, IconUser, Checkbox, Typography, Button, IconLock, Divider, Image as Image$1, Modal, Loading, Dropdown, IconPlus, Menu, IconBold, IconItalic, IconCode, IconMoreVertical, IconAlertCircle } from '@supabase/ui';
+import { jsx, jsxs } from 'react/jsx-runtime';
+import ReactDOM, { flushSync } from 'react-dom';
 
 /******************************************************************************
 Copyright (c) Microsoft Corporation.
@@ -547,7 +520,7 @@ function isSlowBuffer (obj) {
  * This is a slightly modified version of @supabase/ui/Auth
  */
 const size = 21;
-const google = () => jsxRuntime.jsx('svg', Object.assign({
+const google = () => jsx('svg', Object.assign({
     width: size,
     'aria-hidden': 'true',
     focusable: 'false',
@@ -557,12 +530,12 @@ const google = () => jsxRuntime.jsx('svg', Object.assign({
     xmlns: 'http://www.w3.org/2000/svg',
     viewBox: '0 0 488 512',
 }, {
-    children: jsxRuntime.jsx('path', {
+    children: jsx('path', {
         fill: 'currentColor',
         d: 'M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z',
     }, void 0),
 }), void 0);
-const facebook = () => jsxRuntime.jsx('svg', Object.assign({
+const facebook = () => jsx('svg', Object.assign({
     width: size,
     'aria-hidden': 'true',
     focusable: 'false',
@@ -572,12 +545,12 @@ const facebook = () => jsxRuntime.jsx('svg', Object.assign({
     xmlns: 'http://www.w3.org/2000/svg',
     viewBox: '0 0 448 512',
 }, {
-    children: jsxRuntime.jsx('path', {
+    children: jsx('path', {
         fill: 'currentColor',
         d: 'M400 32H48A48 48 0 0 0 0 80v352a48 48 0 0 0 48 48h137.25V327.69h-63V256h63v-54.64c0-62.15 37-96.48 93.67-96.48 27.14 0 55.52 4.84 55.52 4.84v61h-31.27c-30.81 0-40.42 19.12-40.42 38.73V256h68.78l-11 71.69h-57.78V480H400a48 48 0 0 0 48-48V80a48 48 0 0 0-48-48z',
     }, void 0),
 }), void 0);
-const twitter = () => jsxRuntime.jsx('svg', Object.assign({
+const twitter = () => jsx('svg', Object.assign({
     width: size,
     'aria-hidden': 'true',
     focusable: 'false',
@@ -588,12 +561,12 @@ const twitter = () => jsxRuntime.jsx('svg', Object.assign({
     xmlns: 'http://www.w3.org/2000/svg',
     viewBox: '0 0 512 512',
 }, {
-    children: jsxRuntime.jsx('path', {
+    children: jsx('path', {
         fill: 'currentColor',
         d: 'M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z',
     }, void 0),
 }), void 0);
-const apple = () => jsxRuntime.jsx('svg', Object.assign({
+const apple = () => jsx('svg', Object.assign({
     width: size,
     'aria-hidden': 'true',
     focusable: 'false',
@@ -604,12 +577,12 @@ const apple = () => jsxRuntime.jsx('svg', Object.assign({
     xmlns: 'http://www.w3.org/2000/svg',
     viewBox: '0 0 512 512',
 }, {
-    children: jsxRuntime.jsx('path', {
+    children: jsx('path', {
         fill: 'currentColor',
         d: 'M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z',
     }, void 0),
 }), void 0);
-const github = () => jsxRuntime.jsx('svg', Object.assign({
+const github = () => jsx('svg', Object.assign({
     width: size,
     'aria-hidden': 'true',
     focusable: 'false',
@@ -620,12 +593,12 @@ const github = () => jsxRuntime.jsx('svg', Object.assign({
     xmlns: 'http://www.w3.org/2000/svg',
     viewBox: '0 0 496 512',
 }, {
-    children: jsxRuntime.jsx('path', {
+    children: jsx('path', {
         fill: 'currentColor',
         d: 'M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z',
     }, void 0),
 }), void 0);
-const gitlab = () => jsxRuntime.jsx('svg', Object.assign({
+const gitlab = () => jsx('svg', Object.assign({
     width: size,
     'aria-hidden': 'true',
     focusable: 'false',
@@ -636,12 +609,12 @@ const gitlab = () => jsxRuntime.jsx('svg', Object.assign({
     xmlns: 'http://www.w3.org/2000/svg',
     viewBox: '0 0 512 512',
 }, {
-    children: jsxRuntime.jsx('path', {
+    children: jsx('path', {
         fill: 'currentColor',
         d: 'M105.2 24.9c-3.1-8.9-15.7-8.9-18.9 0L29.8 199.7h132c-.1 0-56.6-174.8-56.6-174.8zM.9 287.7c-2.6 8 .3 16.9 7.1 22l247.9 184-226.2-294zm160.8-88l94.3 294 94.3-294zm349.4 88l-28.8-88-226.3 294 247.9-184c6.9-5.1 9.7-14 7.2-22zM425.7 24.9c-3.1-8.9-15.7-8.9-18.9 0l-56.6 174.8h132z',
     }, void 0),
 }), void 0);
-const bitbucket = () => jsxRuntime.jsx('svg', Object.assign({
+const bitbucket = () => jsx('svg', Object.assign({
     width: size,
     'aria-hidden': 'true',
     focusable: 'false',
@@ -652,37 +625,37 @@ const bitbucket = () => jsxRuntime.jsx('svg', Object.assign({
     xmlns: 'http://www.w3.org/2000/svg',
     viewBox: '0 0 512 512',
 }, {
-    children: jsxRuntime.jsx('path', {
+    children: jsx('path', {
         fill: 'currentColor',
         d: 'M22.2 32A16 16 0 0 0 6 47.8a26.35 26.35 0 0 0 .2 2.8l67.9 412.1a21.77 21.77 0 0 0 21.3 18.2h325.7a16 16 0 0 0 16-13.4L505 50.7a16 16 0 0 0-13.2-18.3 24.58 24.58 0 0 0-2.8-.2L22.2 32zm285.9 297.8h-104l-28.1-147h157.3l-25.2 147z',
     }, void 0),
 }), void 0);
-const discord = () => jsxRuntime.jsx('svg', Object.assign({
+const discord = () => jsx('svg', Object.assign({
     width: size,
     height: size,
     viewBox: '0 0 71 55',
     fill: 'none',
     xmlns: 'http://www.w3.org/2000/svg',
 }, {
-    children: jsxRuntime.jsx('g', Object.assign({
+    children: jsx('g', Object.assign({
         clipPath: 'url(#clip0)',
     }, {
-        children: jsxRuntime.jsx('path', {
+        children: jsx('path', {
             d: 'M60.1045 4.8978C55.5792 2.8214 50.7265 1.2916 45.6527 0.41542C45.5603 0.39851 45.468 0.440769 45.4204 0.525289C44.7963 1.6353 44.105 3.0834 43.6209 4.2216C38.1637 3.4046 32.7345 3.4046 27.3892 4.2216C26.905 3.0581 26.1886 1.6353 25.5617 0.525289C25.5141 0.443589 25.4218 0.40133 25.3294 0.41542C20.2584 1.2888 15.4057 2.8186 10.8776 4.8978C10.8384 4.9147 10.8048 4.9429 10.7825 4.9795C1.57795 18.7309 -0.943561 32.1443 0.293408 45.3914C0.299005 45.4562 0.335386 45.5182 0.385761 45.5576C6.45866 50.0174 12.3413 52.7249 18.1147 54.5195C18.2071 54.5477 18.305 54.5139 18.3638 54.4378C19.7295 52.5728 20.9469 50.6063 21.9907 48.5383C22.0523 48.4172 21.9935 48.2735 21.8676 48.2256C19.9366 47.4931 18.0979 46.6 16.3292 45.5858C16.1893 45.5041 16.1781 45.304 16.3068 45.2082C16.679 44.9293 17.0513 44.6391 17.4067 44.3461C17.471 44.2926 17.5606 44.2813 17.6362 44.3151C29.2558 49.6202 41.8354 49.6202 53.3179 44.3151C53.3935 44.2785 53.4831 44.2898 53.5502 44.3433C53.9057 44.6363 54.2779 44.9293 54.6529 45.2082C54.7816 45.304 54.7732 45.5041 54.6333 45.5858C52.8646 46.6197 51.0259 47.4931 49.0921 48.2228C48.9662 48.2707 48.9102 48.4172 48.9718 48.5383C50.038 50.6034 51.2554 52.5699 52.5959 54.435C52.6519 54.5139 52.7526 54.5477 52.845 54.5195C58.6464 52.7249 64.529 50.0174 70.6019 45.5576C70.6551 45.5182 70.6887 45.459 70.6943 45.3942C72.1747 30.0791 68.2147 16.7757 60.1968 4.9823C60.1772 4.9429 60.1437 4.9147 60.1045 4.8978ZM23.7259 37.3253C20.2276 37.3253 17.3451 34.1136 17.3451 30.1693C17.3451 26.225 20.1717 23.0133 23.7259 23.0133C27.308 23.0133 30.1626 26.2532 30.1066 30.1693C30.1066 34.1136 27.28 37.3253 23.7259 37.3253ZM47.3178 37.3253C43.8196 37.3253 40.9371 34.1136 40.9371 30.1693C40.9371 26.225 43.7636 23.0133 47.3178 23.0133C50.9 23.0133 53.7545 26.2532 53.6986 30.1693C53.6986 34.1136 50.9 37.3253 47.3178 37.3253Z',
             fill: 'currentColor',
         }, void 0),
     }), void 0),
 }), void 0);
-const azure = () => jsxRuntime.jsxs('svg', Object.assign({
+const azure = () => jsxs('svg', Object.assign({
     width: size,
     height: size,
     viewBox: '0 0 96 96',
     xmlns: 'http://www.w3.org/2000/svg',
 }, {
     children: [
-        jsxRuntime.jsxs('defs', {
+        jsxs('defs', {
             children: [
-                jsxRuntime.jsxs('linearGradient', Object.assign({
+                jsxs('linearGradient', Object.assign({
                     id: 'e399c19f-b68f-429d-b176-18c2117ff73c',
                     x1: '-1032.172',
                     x2: '-1059.213',
@@ -692,17 +665,17 @@ const azure = () => jsxRuntime.jsxs('svg', Object.assign({
                     gradientUnits: 'userSpaceOnUse',
                 }, {
                     children: [
-                        jsxRuntime.jsx('stop', {
+                        jsx('stop', {
                             offset: '0',
                             stopColor: '#fff',
                         }, void 0),
-                        jsxRuntime.jsx('stop', {
+                        jsx('stop', {
                             offset: '1',
                             stopColor: '#fff',
                         }, void 0),
                     ],
                 }), void 0),
-                jsxRuntime.jsxs('linearGradient', Object.assign({
+                jsxs('linearGradient', Object.assign({
                     id: 'ac2a6fc2-ca48-4327-9a3c-d4dcc3256e15',
                     x1: '-1023.725',
                     x2: '-1029.98',
@@ -712,29 +685,29 @@ const azure = () => jsxRuntime.jsxs('svg', Object.assign({
                     gradientUnits: 'userSpaceOnUse',
                 }, {
                     children: [
-                        jsxRuntime.jsx('stop', {
+                        jsx('stop', {
                             offset: '0',
                             stopOpacity: '.3',
                         }, void 0),
-                        jsxRuntime.jsx('stop', {
+                        jsx('stop', {
                             offset: '.071',
                             stopOpacity: '.2',
                         }, void 0),
-                        jsxRuntime.jsx('stop', {
+                        jsx('stop', {
                             offset: '.321',
                             stopOpacity: '.1',
                         }, void 0),
-                        jsxRuntime.jsx('stop', {
+                        jsx('stop', {
                             offset: '.623',
                             stopOpacity: '.05',
                         }, void 0),
-                        jsxRuntime.jsx('stop', {
+                        jsx('stop', {
                             offset: '1',
                             stopOpacity: '0',
                         }, void 0),
                     ],
                 }), void 0),
-                jsxRuntime.jsxs('linearGradient', Object.assign({
+                jsxs('linearGradient', Object.assign({
                     id: 'a7fee970-a784-4bb1-af8d-63d18e5f7db9',
                     x1: '-1027.165',
                     x2: '-997.482',
@@ -744,11 +717,11 @@ const azure = () => jsxRuntime.jsxs('svg', Object.assign({
                     gradientUnits: 'userSpaceOnUse',
                 }, {
                     children: [
-                        jsxRuntime.jsx('stop', {
+                        jsx('stop', {
                             offset: '0',
                             stopColor: '#fff',
                         }, void 0),
-                        jsxRuntime.jsx('stop', {
+                        jsx('stop', {
                             offset: '1',
                             stopColor: '#fff',
                         }, void 0),
@@ -756,25 +729,25 @@ const azure = () => jsxRuntime.jsxs('svg', Object.assign({
                 }), void 0),
             ],
         }, void 0),
-        jsxRuntime.jsx('path', {
+        jsx('path', {
             fill: 'url(#e399c19f-b68f-429d-b176-18c2117ff73c)',
             d: 'M33.338 6.544h26.038l-27.03 80.087a4.152 4.152 0 0 1-3.933 2.824H8.149a4.145 4.145 0 0 1-3.928-5.47L29.404 9.368a4.152 4.152 0 0 1 3.934-2.825z',
         }, void 0),
-        jsxRuntime.jsx('path', {
+        jsx('path', {
             fill: 'currentColor',
             d: 'M71.175 60.261h-41.29a1.911 1.911 0 0 0-1.305 3.309l26.532 24.764a4.171 4.171 0 0 0 2.846 1.121h23.38z',
         }, void 0),
-        jsxRuntime.jsx('path', {
+        jsx('path', {
             fill: 'currentColor',
             d: 'M33.338 6.544a4.118 4.118 0 0 0-3.943 2.879L4.252 83.917a4.14 4.14 0 0 0 3.908 5.538h20.787a4.443 4.443 0 0 0 3.41-2.9l5.014-14.777 17.91 16.705a4.237 4.237 0 0 0 2.666.972H81.24L71.024 60.261l-29.781.007L59.47 6.544z',
         }, void 0),
-        jsxRuntime.jsx('path', {
+        jsx('path', {
             fill: 'currentColor',
             d: 'M66.595 9.364a4.145 4.145 0 0 0-3.928-2.82H33.648a4.146 4.146 0 0 1 3.928 2.82l25.184 74.62a4.146 4.146 0 0 1-3.928 5.472h29.02a4.146 4.146 0 0 0 3.927-5.472z',
         }, void 0),
     ],
 }), void 0);
-const twitch = () => jsxRuntime.jsx('svg', Object.assign({
+const twitch = () => jsx('svg', Object.assign({
     width: size,
     'aria-hidden': 'true',
     focusable: 'false',
@@ -785,7 +758,7 @@ const twitch = () => jsxRuntime.jsx('svg', Object.assign({
     xmlns: 'http://www.w3.org/2000/svg',
     viewBox: '0 0 512 512',
 }, {
-    children: jsxRuntime.jsx('path', {
+    children: jsx('path', {
         fill: 'currentColor',
         d: 'M391.17,103.47H352.54v109.7h38.63ZM285,103H246.37V212.75H285ZM120.83,0,24.31,91.42V420.58H140.14V512l96.53-91.42h77.25L487.69,256V0ZM449.07,237.75l-77.22,73.12H294.61l-67.6,64v-64H140.14V36.58H449.07Z',
     }, void 0),
@@ -819,36 +792,36 @@ const VIEWS = {
     UPDATE_PASSWORD: 'update_password',
 };
 function Auth({ supabaseClient, className, style, socialLayout = 'vertical', socialColors = false, socialButtonSize = 'medium', providers, view = 'sign_in', redirectTo, onlyThirdPartyProviders = false, magicLink = false, }) {
-    const [authView, setAuthView] = React.useState(view);
-    const [defaultEmail, setDefaultEmail] = React.useState('');
-    const [defaultPassword, setDefaultPassword] = React.useState('');
+    const [authView, setAuthView] = useState(view);
+    const [defaultEmail, setDefaultEmail] = useState('');
+    const [defaultPassword, setDefaultPassword] = useState('');
     const verticalSocialLayout = socialLayout === 'vertical' ? true : false;
     let containerClasses = [];
     if (className) {
         containerClasses.push(className);
     }
-    const Container = (props) => (React__default["default"].createElement("div", { className: containerClasses.join(' '), style: style },
-        React__default["default"].createElement(ui.Space, { size: 8, direction: 'vertical' },
-            React__default["default"].createElement(SocialAuth, { supabaseClient: supabaseClient, verticalSocialLayout: verticalSocialLayout, providers: providers, socialLayout: socialLayout, socialButtonSize: socialButtonSize, socialColors: socialColors, redirectTo: redirectTo, onlyThirdPartyProviders: onlyThirdPartyProviders, magicLink: magicLink }),
+    const Container = (props) => (React__default.createElement("div", { className: containerClasses.join(' '), style: style },
+        React__default.createElement(Space, { size: 8, direction: 'vertical' },
+            React__default.createElement(SocialAuth, { supabaseClient: supabaseClient, verticalSocialLayout: verticalSocialLayout, providers: providers, socialLayout: socialLayout, socialButtonSize: socialButtonSize, socialColors: socialColors, redirectTo: redirectTo, onlyThirdPartyProviders: onlyThirdPartyProviders, magicLink: magicLink }),
             !onlyThirdPartyProviders && props.children)));
-    React.useEffect(() => {
+    useEffect(() => {
         // handle view override
         setAuthView(view);
     }, [view]);
     switch (authView) {
         case VIEWS.SIGN_IN:
         case VIEWS.SIGN_UP:
-            return (React__default["default"].createElement(Container, null,
-                React__default["default"].createElement(EmailAuth, { id: authView === VIEWS.SIGN_UP ? 'auth-sign-up' : 'auth-sign-in', supabaseClient: supabaseClient, authView: authView, setAuthView: setAuthView, defaultEmail: defaultEmail, defaultPassword: defaultPassword, setDefaultEmail: setDefaultEmail, setDefaultPassword: setDefaultPassword, redirectTo: redirectTo, magicLink: magicLink })));
+            return (React__default.createElement(Container, null,
+                React__default.createElement(EmailAuth, { id: authView === VIEWS.SIGN_UP ? 'auth-sign-up' : 'auth-sign-in', supabaseClient: supabaseClient, authView: authView, setAuthView: setAuthView, defaultEmail: defaultEmail, defaultPassword: defaultPassword, setDefaultEmail: setDefaultEmail, setDefaultPassword: setDefaultPassword, redirectTo: redirectTo, magicLink: magicLink })));
         case VIEWS.FORGOTTEN_PASSWORD:
-            return (React__default["default"].createElement(Container, null,
-                React__default["default"].createElement(ui.Auth.ForgottenPassword, { supabaseClient: supabaseClient, setAuthView: setAuthView, redirectTo: redirectTo })));
+            return (React__default.createElement(Container, null,
+                React__default.createElement(Auth$1.ForgottenPassword, { supabaseClient: supabaseClient, setAuthView: setAuthView, redirectTo: redirectTo })));
         case VIEWS.MAGIC_LINK:
-            return (React__default["default"].createElement(Container, null,
-                React__default["default"].createElement(ui.Auth.MagicLink, { supabaseClient: supabaseClient, setAuthView: setAuthView, redirectTo: redirectTo })));
+            return (React__default.createElement(Container, null,
+                React__default.createElement(Auth$1.MagicLink, { supabaseClient: supabaseClient, setAuthView: setAuthView, redirectTo: redirectTo })));
         case VIEWS.UPDATE_PASSWORD:
-            return (React__default["default"].createElement(Container, null,
-                React__default["default"].createElement(ui.Auth.UpdatePassword, { supabaseClient: supabaseClient })));
+            return (React__default.createElement(Container, null,
+                React__default.createElement(Auth$1.UpdatePassword, { supabaseClient: supabaseClient })));
         default:
             return null;
     }
@@ -869,8 +842,8 @@ function SocialAuth(_a) {
             color: 'white',
         },
     };
-    const [loading, setLoading] = React.useState(false);
-    const [error, setError] = React.useState('');
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
     const handleProviderSignIn = (provider) => __awaiter(this, void 0, void 0, function* () {
         setLoading(true);
         const { error } = yield supabaseClient.auth.signIn({ provider }, {
@@ -881,30 +854,30 @@ function SocialAuth(_a) {
             setError(error.message);
         setLoading(false);
     });
-    return (React__default["default"].createElement(ui.Space, { size: 8, direction: 'vertical' }, providers && providers.length > 0 && (React__default["default"].createElement(React__default["default"].Fragment, null,
-        React__default["default"].createElement(ui.Space, { size: 4, direction: 'vertical' },
-            React__default["default"].createElement(ui.Typography.Text, { type: "secondary" }, "Sign in with"),
-            React__default["default"].createElement(ui.Space, { size: 2, direction: socialLayout }, providers.map((provider) => {
+    return (React__default.createElement(Space, { size: 8, direction: 'vertical' }, providers && providers.length > 0 && (React__default.createElement(React__default.Fragment, null,
+        React__default.createElement(Space, { size: 4, direction: 'vertical' },
+            React__default.createElement(Typography.Text, { type: "secondary" }, "Sign in with"),
+            React__default.createElement(Space, { size: 2, direction: socialLayout }, providers.map((provider) => {
                 // @ts-ignore
                 const AuthIcon = SocialIcons[provider];
-                return (React__default["default"].createElement("div", { key: provider, style: !verticalSocialLayout ? { flexGrow: 1 } : {} },
-                    React__default["default"].createElement(ui.Button, { block: true, type: "default", shadow: true, size: socialButtonSize, style: socialColors ? buttonStyles[provider] : {}, icon: React__default["default"].createElement(AuthIcon, null), loading: loading, onClick: () => handleProviderSignIn(provider), className: "flex items-center" }, verticalSocialLayout &&
+                return (React__default.createElement("div", { key: provider, style: !verticalSocialLayout ? { flexGrow: 1 } : {} },
+                    React__default.createElement(Button, { block: true, type: "default", shadow: true, size: socialButtonSize, style: socialColors ? buttonStyles[provider] : {}, icon: React__default.createElement(AuthIcon, null), loading: loading, onClick: () => handleProviderSignIn(provider), className: "flex items-center" }, verticalSocialLayout &&
                         'Sign in with ' +
                             provider.charAt(0).toUpperCase() +
                             provider.slice(1))));
             }))),
-        !onlyThirdPartyProviders && React__default["default"].createElement(ui.Divider, null, "or continue with")))));
+        !onlyThirdPartyProviders && React__default.createElement(Divider, null, "or continue with")))));
 }
 function EmailAuth({ authView, defaultEmail, defaultPassword, id, setAuthView, setDefaultEmail, setDefaultPassword, supabaseClient, redirectTo, magicLink, }) {
-    const isMounted = React.useRef(true);
-    const [email, setEmail] = React.useState(defaultEmail);
-    const [password, setPassword] = React.useState(defaultPassword);
-    const [displayName, setDisplayName] = React.useState('');
-    const [rememberMe, setRememberMe] = React.useState(false);
-    const [error, setError] = React.useState('');
-    const [loading, setLoading] = React.useState(false);
-    const [message, setMessage] = React.useState('');
-    React.useEffect(() => {
+    const isMounted = useRef(true);
+    const [email, setEmail] = useState(defaultEmail);
+    const [password, setPassword] = useState(defaultPassword);
+    const [displayName, setDisplayName] = useState('');
+    const [rememberMe, setRememberMe] = useState(false);
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState('');
+    useEffect(() => {
         setEmail(defaultEmail);
         setPassword(defaultPassword);
         return () => {
@@ -955,55 +928,55 @@ function EmailAuth({ authView, defaultEmail, defaultPassword, id, setAuthView, s
         setDefaultPassword(password);
         setAuthView(newView);
     };
-    return (React__default["default"].createElement("form", { id: id, onSubmit: handleSubmit },
-        React__default["default"].createElement(ui.Space, { size: 6, direction: 'vertical' },
-            React__default["default"].createElement(ui.Space, { size: 3, direction: 'vertical' },
-                React__default["default"].createElement(ui.Input, { label: "Email address", placeholder: "Email...", autoComplete: "on", defaultValue: email, icon: React__default["default"].createElement(ui.IconMail, { size: 21, stroke: '#666666' }), onChange: (e) => setEmail(e.target.value) }),
-                React__default["default"].createElement(ui.Input, { label: "Password", placeholder: "Password...", type: "password", defaultValue: password, autoComplete: "new-password", icon: React__default["default"].createElement(ui.IconKey, { size: 21, stroke: '#666666' }), onChange: (e) => setPassword(e.target.value) }),
-                authView === 'sign_up' && (React__default["default"].createElement(ui.Input, { label: "Display Name", placeholder: "Display name...", name: "display-name", type: "text", defaultValue: displayName, autoComplete: "on", icon: React__default["default"].createElement(ui.IconUser, { size: 21, stroke: '#666666' }), onChange: (e) => setDisplayName(e.target.value) }))),
-            React__default["default"].createElement(ui.Space, { direction: "vertical", size: 6 },
-                React__default["default"].createElement(ui.Space, { style: { justifyContent: 'space-between' } },
-                    React__default["default"].createElement(ui.Checkbox, { label: "Remember me", name: "remember_me", id: "remember_me", onChange: (value) => setRememberMe(value.target.checked) }),
-                    authView === VIEWS.SIGN_IN && (React__default["default"].createElement(ui.Typography.Link, { href: "#auth-forgot-password", onClick: (e) => {
+    return (React__default.createElement("form", { id: id, onSubmit: handleSubmit },
+        React__default.createElement(Space, { size: 6, direction: 'vertical' },
+            React__default.createElement(Space, { size: 3, direction: 'vertical' },
+                React__default.createElement(Input, { label: "Email address", placeholder: "Email...", autoComplete: "on", defaultValue: email, icon: React__default.createElement(IconMail, { size: 21, stroke: '#666666' }), onChange: (e) => setEmail(e.target.value) }),
+                React__default.createElement(Input, { label: "Password", placeholder: "Password...", type: "password", defaultValue: password, autoComplete: "new-password", icon: React__default.createElement(IconKey, { size: 21, stroke: '#666666' }), onChange: (e) => setPassword(e.target.value) }),
+                authView === 'sign_up' && (React__default.createElement(Input, { label: "Display Name", placeholder: "Display name...", name: "display-name", type: "text", defaultValue: displayName, autoComplete: "on", icon: React__default.createElement(IconUser, { size: 21, stroke: '#666666' }), onChange: (e) => setDisplayName(e.target.value) }))),
+            React__default.createElement(Space, { direction: "vertical", size: 6 },
+                React__default.createElement(Space, { style: { justifyContent: 'space-between' } },
+                    React__default.createElement(Checkbox, { label: "Remember me", name: "remember_me", id: "remember_me", onChange: (value) => setRememberMe(value.target.checked) }),
+                    authView === VIEWS.SIGN_IN && (React__default.createElement(Typography.Link, { href: "#auth-forgot-password", onClick: (e) => {
                             e.preventDefault();
                             setAuthView(VIEWS.FORGOTTEN_PASSWORD);
                         } }, "Forgot your password?"))),
-                React__default["default"].createElement(ui.Button, { htmlType: "submit", type: "primary", size: "large", icon: React__default["default"].createElement(ui.IconLock, { size: 21 }), loading: loading, block: true, disabled: authView === VIEWS.SIGN_IN
+                React__default.createElement(Button, { htmlType: "submit", type: "primary", size: "large", icon: React__default.createElement(IconLock, { size: 21 }), loading: loading, block: true, disabled: authView === VIEWS.SIGN_IN
                         ? !email || !password
                         : !displayName || !email || !password }, authView === VIEWS.SIGN_IN ? 'Sign in' : 'Sign up')),
-            React__default["default"].createElement(ui.Space, { direction: "vertical", style: { textAlign: 'center' } },
-                authView === VIEWS.SIGN_IN && magicLink && (React__default["default"].createElement(ui.Typography.Link, { href: "#auth-magic-link", onClick: (e) => {
+            React__default.createElement(Space, { direction: "vertical", style: { textAlign: 'center' } },
+                authView === VIEWS.SIGN_IN && magicLink && (React__default.createElement(Typography.Link, { href: "#auth-magic-link", onClick: (e) => {
                         e.preventDefault();
                         setAuthView(VIEWS.MAGIC_LINK);
                     } }, "Sign in with magic link")),
-                authView === VIEWS.SIGN_IN ? (React__default["default"].createElement(ui.Typography.Link, { href: "#auth-sign-up", onClick: (e) => {
+                authView === VIEWS.SIGN_IN ? (React__default.createElement(Typography.Link, { href: "#auth-sign-up", onClick: (e) => {
                         e.preventDefault();
                         handleViewChange(VIEWS.SIGN_UP);
-                    } }, "Don't have an account? Sign up")) : (React__default["default"].createElement(ui.Typography.Link, { href: "#auth-sign-in", onClick: (e) => {
+                    } }, "Don't have an account? Sign up")) : (React__default.createElement(Typography.Link, { href: "#auth-sign-in", onClick: (e) => {
                         e.preventDefault();
                         handleViewChange(VIEWS.SIGN_IN);
                     } }, "Do you have an account? Sign in")),
-                message && React__default["default"].createElement(ui.Typography.Text, null, message),
-                error && React__default["default"].createElement(ui.Typography.Text, { type: "danger" }, error)))));
+                message && React__default.createElement(Typography.Text, null, message),
+                error && React__default.createElement(Typography.Text, { type: "danger" }, error)))));
 }
-Auth.ForgottenPassword = ui.Auth.ForgottenPassword;
-Auth.UpdatePassword = ui.Auth.UpdatePassword;
-Auth.MagicLink = ui.Auth.MagicLink;
-Auth.UserContextProvider = ui.Auth.UserContextProvider;
-Auth.useUser = ui.Auth.useUser;
+Auth.ForgottenPassword = Auth$1.ForgottenPassword;
+Auth.UpdatePassword = Auth$1.UpdatePassword;
+Auth.MagicLink = Auth$1.MagicLink;
+Auth.UserContextProvider = Auth$1.UserContextProvider;
+Auth.useUser = Auth$1.useUser;
 
 function r(e){var t,f,n="";if("string"==typeof e||"number"==typeof e)n+=e;else if("object"==typeof e)if(Array.isArray(e))for(t=0;t<e.length;t++)e[t]&&(f=r(e[t]))&&(n&&(n+=" "),n+=f);else for(t in e)e[t]&&(n&&(n+=" "),n+=t);return n}function clsx(){for(var e,t,f=0,n="";f<arguments.length;)(e=arguments[f++])&&(t=r(e))&&(n&&(n+=" "),n+=t);return n}
 
 const Reaction = ({ type }) => {
     var _a, _b;
     const query = useReaction({ type });
-    return (React__default["default"].createElement("div", { className: clsx('h-4 w-4 rounded-full grid place-items-center text-alpha-50') },
-        React__default["default"].createElement(ui.Image, { className: 'h-4 w-4', source: (_a = query.data) === null || _a === void 0 ? void 0 : _a.url, alt: (_b = query.data) === null || _b === void 0 ? void 0 : _b.label })));
+    return (React__default.createElement("div", { className: clsx('h-4 w-4 rounded-full grid place-items-center text-alpha-50') },
+        React__default.createElement(Image$1, { className: 'h-4 w-4', source: (_a = query.data) === null || _a === void 0 ? void 0 : _a.url, alt: (_b = query.data) === null || _b === void 0 ? void 0 : _b.label })));
 };
 
 const useUser = ({ id }, options = {}) => {
     const api = useApi();
-    return reactQuery.useQuery(['users', id], () => {
+    return useQuery(['users', id], () => {
         return api.getUser(id);
     }, {
         staleTime: Infinity,
@@ -1090,7 +1063,7 @@ function useImage(_ref) {
       _ref$useSuspense = _ref.useSuspense,
       useSuspense = _ref$useSuspense === void 0 ? true : _ref$useSuspense;
 
-  var _useState = React.useState(true),
+  var _useState = useState(true),
       setIsLoading = _useState[1];
 
   var sourceList = removeBlankArrayElements(stringToArray$1(srcList));
@@ -1153,28 +1126,28 @@ function useImage(_ref) {
 const Avatar = (_a) => {
     var { src, className, size = 'lg' } = _a, otherProps = __rest(_a, ["src", "className", "size"]);
     const image = useImage({ srcList: src || [], useSuspense: false });
-    return (React__default["default"].createElement("div", Object.assign({}, otherProps, { className: clsx(size === 'sm' ? 'w-6 h-6' : 'w-10 h-10', 'relative inline-block overflow-hidden rounded-full bg-alpha-10', className) }),
-        image.src && (React__default["default"].createElement(ui.Image, { className: "object-cover w-full h-full rounded-full", source: image.src })),
-        image.isLoading && React__default["default"].createElement("div", { className: "absolute inset-0" }),
-        image.error && (React__default["default"].createElement("div", { className: "absolute inset-0" },
-            React__default["default"].createElement("svg", { className: "text-alpha-60", viewBox: "0 0 128 128", role: "img", "aria-label": "avatar" },
-                React__default["default"].createElement("path", { fill: "currentColor", d: "M103,102.1388 C93.094,111.92 79.3504,118 64.1638,118 C48.8056,118 34.9294,111.768 25,101.7892 L25,95.2 C25,86.8096 31.981,80 40.6,80 L87.4,80 C96.019,80 103,86.8096 103,95.2 L103,102.1388 Z" }),
-                React__default["default"].createElement("path", { fill: "currentColor", d: "M63.9961647,24 C51.2938136,24 41,34.2938136 41,46.9961647 C41,59.7061864 51.2938136,70 63.9961647,70 C76.6985159,70 87,59.7061864 87,46.9961647 C87,34.2938136 76.6985159,24 63.9961647,24" }))))));
+    return (React__default.createElement("div", Object.assign({}, otherProps, { className: clsx(size === 'sm' ? 'w-6 h-6' : 'w-10 h-10', 'relative inline-block overflow-hidden rounded-full bg-alpha-10', className) }),
+        image.src && (React__default.createElement(Image$1, { className: "object-cover w-full h-full rounded-full", source: image.src })),
+        image.isLoading && React__default.createElement("div", { className: "absolute inset-0" }),
+        image.error && (React__default.createElement("div", { className: "absolute inset-0" },
+            React__default.createElement("svg", { className: "text-alpha-60", viewBox: "0 0 128 128", role: "img", "aria-label": "avatar" },
+                React__default.createElement("path", { fill: "currentColor", d: "M103,102.1388 C93.094,111.92 79.3504,118 64.1638,118 C48.8056,118 34.9294,111.768 25,101.7892 L25,95.2 C25,86.8096 31.981,80 40.6,80 L87.4,80 C96.019,80 103,86.8096 103,95.2 L103,102.1388 Z" }),
+                React__default.createElement("path", { fill: "currentColor", d: "M63.9961647,24 C51.2938136,24 41,34.2938136 41,46.9961647 C41,59.7061864 51.2938136,70 63.9961647,70 C76.6985159,70 87,59.7061864 87,46.9961647 C87,34.2938136 76.6985159,24 63.9961647,24" }))))));
 };
 
 const User = ({ id, size = 'lg', showName = true, showAvatar = true, propagateClick = true, className, }) => {
     const context = useCommentsContext();
     const query = useUser({ id: id }, { enabled: !!id });
     const user = query.data;
-    return (React__default["default"].createElement("div", { className: clsx('flex items-center space-x-2', className) },
-        showAvatar && (React__default["default"].createElement(Avatar, { key: user === null || user === void 0 ? void 0 : user.avatar, className: clsx(user && 'cursor-pointer'), onClick: () => {
+    return (React__default.createElement("div", { className: clsx('flex items-center space-x-2', className) },
+        showAvatar && (React__default.createElement(Avatar, { key: user === null || user === void 0 ? void 0 : user.avatar, className: clsx(user && 'cursor-pointer'), onClick: () => {
                 var _a;
                 if (user && propagateClick) {
                     (_a = context.onUserClick) === null || _a === void 0 ? void 0 : _a.call(context, user);
                 }
             }, src: user === null || user === void 0 ? void 0 : user.avatar, size: size })),
-        user && showName && (React__default["default"].createElement(ui.Typography.Text, null,
-            React__default["default"].createElement("span", { className: "cursor-pointer", tabIndex: 0, onClick: () => {
+        user && showName && (React__default.createElement(Typography.Text, null,
+            React__default.createElement("span", { className: "cursor-pointer", tabIndex: 0, onClick: () => {
                     var _a;
                     if (propagateClick) {
                         (_a = context.onUserClick) === null || _a === void 0 ? void 0 : _a.call(context, user);
@@ -1188,33 +1161,33 @@ const CommentReactionsModal = ({ visible, commentId, reactionType, onClose, }) =
         commentId,
         reactionType,
     }, { enabled: visible });
-    return (React__default["default"].createElement("div", { className: "fixed inset-0 -z-10" },
-        React__default["default"].createElement(ui.Modal, { title: "Reactions", visible: visible, onCancel: () => onClose(), onConfirm: () => onClose(), showIcon: false, size: "tiny", hideFooter: true },
-            React__default["default"].createElement("div", { className: "max-h-[320px] overflow-y-auto space-y-3 w-full" },
-                query.isLoading && (React__default["default"].createElement("div", { className: "grid w-full h-10 place-items-center" },
-                    React__default["default"].createElement("div", { className: "mr-4" },
-                        React__default["default"].createElement(ui.Loading, { active: true }, null)))), (_a = query.data) === null || _a === void 0 ? void 0 :
-                _a.map((commentReaction) => (React__default["default"].createElement(User, { key: commentReaction.id, id: commentReaction.user_id, showAvatar: true, showName: true, className: "font-bold" })))))));
+    return (React__default.createElement("div", { className: "fixed inset-0 -z-10" },
+        React__default.createElement(Modal, { title: "Reactions", visible: visible, onCancel: () => onClose(), onConfirm: () => onClose(), showIcon: false, size: "tiny", hideFooter: true },
+            React__default.createElement("div", { className: "max-h-[320px] overflow-y-auto space-y-3 w-full" },
+                query.isLoading && (React__default.createElement("div", { className: "grid w-full h-10 place-items-center" },
+                    React__default.createElement("div", { className: "mr-4" },
+                        React__default.createElement(Loading, { active: true }, null)))), (_a = query.data) === null || _a === void 0 ? void 0 :
+                _a.map((commentReaction) => (React__default.createElement(User, { key: commentReaction.id, id: commentReaction.user_id, showAvatar: true, showName: true, className: "font-bold" })))))));
 };
 const CommentReaction = ({ metadata, toggleReaction, }) => {
-    const [showDetails, setShowDetails] = React.useState(false);
-    return (React__default["default"].createElement(React__default["default"].Fragment, null,
-        React__default["default"].createElement(CommentReactionsModal, { commentId: metadata.comment_id, reactionType: metadata.reaction_type, visible: showDetails, onClose: () => setShowDetails(false), size: "small" }),
-        React__default["default"].createElement("div", { className: clsx('flex space-x-2 py-0.5 px-1 rounded-full items-center border-2', metadata.active_for_user
+    const [showDetails, setShowDetails] = useState(false);
+    return (React__default.createElement(React__default.Fragment, null,
+        React__default.createElement(CommentReactionsModal, { commentId: metadata.comment_id, reactionType: metadata.reaction_type, visible: showDetails, onClose: () => setShowDetails(false), size: "small" }),
+        React__default.createElement("div", { className: clsx('flex space-x-2 py-0.5 px-1 rounded-full items-center border-2', metadata.active_for_user
                 ? `bg-[color:var(--sce-accent-50)] dark:bg-[color:var(--sce-accent-900)] border-[color:var(--sce-accent-200)] dark:border-[color:var(--sce-accent-600)]`
                 : 'bg-transparent border-alpha-10') },
-            React__default["default"].createElement("div", { tabIndex: 0, className: 'cursor-pointer', onClick: () => {
+            React__default.createElement("div", { tabIndex: 0, className: 'cursor-pointer', onClick: () => {
                     toggleReaction(metadata.reaction_type);
                 } },
-                React__default["default"].createElement(Reaction, { type: metadata.reaction_type })),
-            React__default["default"].createElement("p", { className: "pr-1 text-xs dark:text-[color:var(--sce-accent-50)] text-[color:var(--sce-accent-900)]" },
-                React__default["default"].createElement("span", { className: "cursor-pointer", onClick: () => setShowDetails(true) }, metadata.reaction_count)))));
+                React__default.createElement(Reaction, { type: metadata.reaction_type })),
+            React__default.createElement("p", { className: "pr-1 text-xs dark:text-[color:var(--sce-accent-50)] text-[color:var(--sce-accent-900)]" },
+                React__default.createElement("span", { className: "cursor-pointer", onClick: () => setShowDetails(true) }, metadata.reaction_count)))));
 };
 
 const useReactions = (options = {}) => {
     const api = useApi();
-    const queryClient = reactQuery.useQueryClient();
-    return reactQuery.useQuery(['reactions'], () => {
+    const queryClient = useQueryClient();
+    return useQuery(['reactions'], () => {
         return api.getReactions();
     }, {
         enabled: options.enabled,
@@ -1230,42 +1203,42 @@ const useReactions = (options = {}) => {
 const ReactionSelector = ({ activeReactions, toggleReaction, }) => {
     var _a;
     const reactions = useReactions();
-    return (React__default["default"].createElement(ui.Dropdown, { overlay: (_a = reactions.data) === null || _a === void 0 ? void 0 : _a.map((reaction) => (React__default["default"].createElement(ui.Dropdown.Item, { key: reaction.type, onClick: () => {
+    return (React__default.createElement(Dropdown, { overlay: (_a = reactions.data) === null || _a === void 0 ? void 0 : _a.map((reaction) => (React__default.createElement(Dropdown.Item, { key: reaction.type, onClick: () => {
                 toggleReaction(reaction.type);
-            }, icon: React__default["default"].createElement("div", { className: clsx('p-0.5 -ml-2 border-2 rounded-full', activeReactions.has(reaction.type)
+            }, icon: React__default.createElement("div", { className: clsx('p-0.5 -ml-2 border-2 rounded-full', activeReactions.has(reaction.type)
                     ? 'bg-[color:var(--sce-accent-50)] border-[color:var(--sce-accent-200)] dark:bg-[color:var(--sce-accent-900)] dark:border-[color:var(--sce-accent-600)]'
                     : 'bg-transparent border-transparent') },
-                React__default["default"].createElement(Reaction, { type: reaction.type })) },
-            React__default["default"].createElement(ui.Typography.Text, { className: "text-sm" }, reaction.label)))) },
-        React__default["default"].createElement("div", { className: "flex items-center justify-center w-[22px] h-[22px] text-xs rounded-full border-alpha-10 border-2" },
-            React__default["default"].createElement(ui.IconPlus, { className: "w-[12px] h-[12px] text-alpha-50" }))));
+                React__default.createElement(Reaction, { type: reaction.type })) },
+            React__default.createElement(Typography.Text, { className: "text-sm" }, reaction.label)))) },
+        React__default.createElement("div", { className: "flex items-center justify-center w-[22px] h-[22px] text-xs rounded-full border-alpha-10 border-2" },
+            React__default.createElement(IconPlus, { className: "w-[12px] h-[12px] text-alpha-50" }))));
 };
 
 const CommentReactions = ({ activeReactions, reactionsMetadata, toggleReaction, }) => {
-    return (React__default["default"].createElement("div", { className: "flex h-6 space-x-2" },
-        React__default["default"].createElement(ReactionSelector, { activeReactions: activeReactions, toggleReaction: toggleReaction }),
-        reactionsMetadata.map((reactionMetadata) => (React__default["default"].createElement(CommentReaction, { key: reactionMetadata.reaction_type, metadata: reactionMetadata, toggleReaction: toggleReaction })))));
+    return (React__default.createElement("div", { className: "flex h-6 space-x-2" },
+        React__default.createElement(ReactionSelector, { activeReactions: activeReactions, toggleReaction: toggleReaction }),
+        reactionsMetadata.map((reactionMetadata) => (React__default.createElement(CommentReaction, { key: reactionMetadata.reaction_type, metadata: reactionMetadata, toggleReaction: toggleReaction })))));
 };
 
-const defaultQueryClient = new reactQuery.QueryClient();
-const SupabaseClientContext = React.createContext(null);
+const defaultQueryClient = new QueryClient();
+const SupabaseClientContext = createContext(null);
 const useSupabaseClient = () => {
-    const supabaseClient = React.useContext(SupabaseClientContext);
+    const supabaseClient = useContext(SupabaseClientContext);
     if (!supabaseClient) {
         throw new Error('No supabase client found. Make sure this code is contained in a CommentsProvider.');
     }
     return supabaseClient;
 };
-const CommentsContext = React.createContext(null);
+const CommentsContext = createContext(null);
 const useCommentsContext = () => {
-    const context = React.useContext(CommentsContext);
+    const context = useContext(CommentsContext);
     if (!context) {
         throw new Error('CommentsProvider not found. Make sure this code is contained in a CommentsProvider.');
     }
     return context;
 };
 const CommentsProvider = ({ queryClient = defaultQueryClient, supabaseClient, children, onAuthRequested, onUserClick, mode = 'light', accentColor = 'rgb(110, 231,183)', onError, components, enableMentions = true, }) => {
-    const context = React.useMemo(() => ({
+    const context = useMemo(() => ({
         onAuthRequested,
         onUserClick,
         mode,
@@ -1280,7 +1253,7 @@ const CommentsProvider = ({ queryClient = defaultQueryClient, supabaseClient, ch
         enableMentions,
         components === null || components === void 0 ? void 0 : components.CommentReactions,
     ]);
-    React.useEffect(() => {
+    useEffect(() => {
         const subscription = supabaseClient.auth.onAuthStateChange(() => {
             // refetch all queries when auth changes
             queryClient.invalidateQueries();
@@ -1291,14 +1264,14 @@ const CommentsProvider = ({ queryClient = defaultQueryClient, supabaseClient, ch
         };
     }, [queryClient, supabaseClient]);
     useCssPalette(accentColor, 'sce-accent');
-    React.useEffect(() => {
+    useEffect(() => {
         document.body.classList.add(mode);
         return () => {
             document.body.classList.remove(mode);
         };
     }, [mode]);
     // Convenience api for handling errors
-    React.useEffect(() => {
+    useEffect(() => {
         const queryCache = queryClient.getQueryCache();
         const originalErrorHandler = queryCache.config.onError;
         queryCache.config.onError = (error, query) => {
@@ -1306,21 +1279,21 @@ const CommentsProvider = ({ queryClient = defaultQueryClient, supabaseClient, ch
             originalErrorHandler === null || originalErrorHandler === void 0 ? void 0 : originalErrorHandler(error, query);
         };
     }, [queryClient]);
-    return (React__default["default"].createElement(reactQuery.QueryClientProvider, { client: queryClient },
-        React__default["default"].createElement(SupabaseClientContext.Provider, { value: supabaseClient },
-            React__default["default"].createElement(Auth.UserContextProvider, { supabaseClient: supabaseClient },
-                React__default["default"].createElement(CommentsContext.Provider, { value: context }, children)))));
+    return (React__default.createElement(QueryClientProvider, { client: queryClient },
+        React__default.createElement(SupabaseClientContext.Provider, { value: supabaseClient },
+            React__default.createElement(Auth.UserContextProvider, { supabaseClient: supabaseClient },
+                React__default.createElement(CommentsContext.Provider, { value: context }, children)))));
 };
 
 const useApi = () => {
     const supabase = useSupabaseClient();
-    const api = React.useMemo(() => createApiClient(supabase), [supabase]);
+    const api = useMemo(() => createApiClient(supabase), [supabase]);
     return api;
 };
 
 const useComment = ({ id }, options = {}) => {
     const api = useApi();
-    return reactQuery.useQuery(['comments', id], () => {
+    return useQuery(['comments', id], () => {
         return api.getComment(id);
     }, {
         staleTime: Infinity,
@@ -33350,14 +33323,14 @@ class Editor$1 extends Editor$2 {
 }
 
 const Portals = ({ renderers }) => {
-    return (React__default["default"].createElement(React__default["default"].Fragment, null, Array.from(renderers).map(([key, renderer]) => {
-        return ReactDOM__default["default"].createPortal(renderer.reactElement, renderer.element, key);
+    return (React__default.createElement(React__default.Fragment, null, Array.from(renderers).map(([key, renderer]) => {
+        return ReactDOM.createPortal(renderer.reactElement, renderer.element, key);
     })));
 };
-class PureEditorContent extends React__default["default"].Component {
+class PureEditorContent extends React__default.Component {
     constructor(props) {
         super(props);
-        this.editorContentRef = React__default["default"].createRef();
+        this.editorContentRef = React__default.createRef();
         this.state = {
             renderers: new Map(),
         };
@@ -33405,22 +33378,22 @@ class PureEditorContent extends React__default["default"].Component {
     }
     render() {
         const { editor, ...rest } = this.props;
-        return (React__default["default"].createElement(React__default["default"].Fragment, null,
-            React__default["default"].createElement("div", { ref: this.editorContentRef, ...rest }),
-            React__default["default"].createElement(Portals, { renderers: this.state.renderers })));
+        return (React__default.createElement(React__default.Fragment, null,
+            React__default.createElement("div", { ref: this.editorContentRef, ...rest }),
+            React__default.createElement(Portals, { renderers: this.state.renderers })));
     }
 }
-const EditorContent = React__default["default"].memo(PureEditorContent);
+const EditorContent = React__default.memo(PureEditorContent);
 
-const ReactNodeViewContext = React.createContext({
+const ReactNodeViewContext = createContext({
     onDragStart: undefined,
 });
-const useReactNodeView = () => React.useContext(ReactNodeViewContext);
+const useReactNodeView = () => useContext(ReactNodeViewContext);
 
-React__default["default"].forwardRef((props, ref) => {
+React__default.forwardRef((props, ref) => {
     const { onDragStart } = useReactNodeView();
     const Tag = props.as || 'div';
-    return (React__default["default"].createElement(Tag, { ...props, ref: ref, "data-node-view-wrapper": "", onDragStart: onDragStart, style: {
+    return (React__default.createElement(Tag, { ...props, ref: ref, "data-node-view-wrapper": "", onDragStart: onDragStart, style: {
             whiteSpace: 'normal',
             ...props.style,
         } }));
@@ -33458,9 +33431,9 @@ class ReactRenderer {
                 this.ref = ref;
             };
         }
-        this.reactElement = React__default["default"].createElement(Component, { ...props });
+        this.reactElement = React__default.createElement(Component, { ...props });
         queueMicrotask(() => {
-            ReactDOM.flushSync(() => {
+            flushSync(() => {
                 var _a;
                 if ((_a = this.editor) === null || _a === void 0 ? void 0 : _a.contentComponent) {
                     this.editor.contentComponent.setState({
@@ -33479,7 +33452,7 @@ class ReactRenderer {
     }
     destroy() {
         queueMicrotask(() => {
-            ReactDOM.flushSync(() => {
+            flushSync(() => {
                 var _a;
                 if ((_a = this.editor) === null || _a === void 0 ? void 0 : _a.contentComponent) {
                     const { renderers } = this.editor.contentComponent.state;
@@ -33494,13 +33467,13 @@ class ReactRenderer {
 }
 
 function useForceUpdate() {
-    const [, setValue] = React.useState(0);
+    const [, setValue] = useState(0);
     return () => setValue(value => value + 1);
 }
 const useEditor = (options = {}, deps = []) => {
-    const [editor, setEditor] = React.useState(null);
+    const [editor, setEditor] = useState(null);
     const forceUpdate = useForceUpdate();
-    React.useEffect(() => {
+    useEffect(() => {
         let isMounted = true;
         const instance = new Editor$1(options);
         setEditor(instance);
@@ -33882,10 +33855,10 @@ const Mention = Node.create({
     },
 });
 
-const MentionList = React.forwardRef((props, ref) => {
-    const [selectedIndex, setSelectedIndex] = React.useState(0);
+const MentionList = forwardRef((props, ref) => {
+    const [selectedIndex, setSelectedIndex] = useState(0);
     const query = useSearchUsers$1({ search: props.query });
-    React.useEffect(() => setSelectedIndex(0), [query.data]);
+    useEffect(() => setSelectedIndex(0), [query.data]);
     const selectItem = (index) => {
         var _a;
         const item = (_a = query.data) === null || _a === void 0 ? void 0 : _a[index];
@@ -33908,7 +33881,7 @@ const MentionList = React.forwardRef((props, ref) => {
     const enterHandler = () => {
         selectItem(selectedIndex);
     };
-    React.useImperativeHandle(ref, () => ({
+    useImperativeHandle(ref, () => ({
         onKeyDown: ({ event }) => {
             if (event.key === 'ArrowUp') {
                 upHandler();
@@ -33928,14 +33901,14 @@ const MentionList = React.forwardRef((props, ref) => {
     if (!props.editor.options.editable) {
         return null;
     }
-    return (React__default["default"].createElement(ui.Menu, { className: "overflow-hidden rounded-lg dark:bg-neutral-800 bg-neutral-100" },
-        query.isLoading && React__default["default"].createElement(ui.Loading, { active: true }, null),
+    return (React__default.createElement(Menu, { className: "overflow-hidden rounded-lg dark:bg-neutral-800 bg-neutral-100" },
+        query.isLoading && React__default.createElement(Loading, { active: true }, null),
         query.data &&
             query.data.length > 0 &&
-            query.data.map((item, index) => (React__default["default"].createElement(ui.Menu.Item, { active: selectedIndex === index, key: index, onClick: () => selectItem(index) },
-                React__default["default"].createElement(User, { key: item.id, id: item.id, size: "sm", propagateClick: false })))),
-        query.data && query.data.length === 0 && (React__default["default"].createElement("div", { className: "px-4 py-2" },
-            React__default["default"].createElement(ui.Typography.Text, null, "No results.")))));
+            query.data.map((item, index) => (React__default.createElement(Menu.Item, { active: selectedIndex === index, key: index, onClick: () => selectItem(index) },
+                React__default.createElement(User, { key: item.id, id: item.id, size: "sm", propagateClick: false })))),
+        query.data && query.data.length === 0 && (React__default.createElement("div", { className: "px-4 py-2" },
+            React__default.createElement(Typography.Text, null, "No results.")))));
 });
 const suggestionConfig = {
     items: () => [],
@@ -34310,13 +34283,13 @@ const getMentionedUserIds = (doc) => {
 };
 const timeout = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const useIsomorphicEffect = () => {
-    return typeof window !== 'undefined' ? React.useLayoutEffect : React.useEffect;
+    return typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 };
 
 const useComments = ({ topic, parentId = null }, options = {}) => {
     const api = useApi();
-    const queryClient = reactQuery.useQueryClient();
-    return reactQuery.useQuery(['comments', { topic, parentId }], () => __awaiter(void 0, void 0, void 0, function* () {
+    const queryClient = useQueryClient();
+    return useQuery(['comments', { topic, parentId }], () => __awaiter(void 0, void 0, void 0, function* () {
         // This might look crazy, but it ensures the spinner will show for a
         // minimum of 200ms which is a pleasant amount of time for the sake of ux.
         const minTime = timeout(220);
@@ -34335,9 +34308,9 @@ const useComments = ({ topic, parentId = null }, options = {}) => {
 };
 
 const useAddComment = () => {
-    const queryClient = reactQuery.useQueryClient();
+    const queryClient = useQueryClient();
     const api = useApi();
-    return reactQuery.useMutation(({ comment, topic, parentId, mentionedUserIds }) => {
+    return useMutation(({ comment, topic, parentId, mentionedUserIds }) => {
         return api.addComment({
             comment,
             topic,
@@ -34356,8 +34329,8 @@ const useAddComment = () => {
 
 const useUpdateComment = () => {
     const api = useApi();
-    const queryClient = reactQuery.useQueryClient();
-    return reactQuery.useMutation(({ id, comment, mentionedUserIds }) => {
+    const queryClient = useQueryClient();
+    return useMutation(({ id, comment, mentionedUserIds }) => {
         return api.updateComment(id, {
             comment,
             mentioned_user_ids: mentionedUserIds,
@@ -34370,9 +34343,9 @@ const useUpdateComment = () => {
 };
 
 const useDeleteComment = () => {
-    const queryClient = reactQuery.useQueryClient();
+    const queryClient = useQueryClient();
     const api = useApi();
-    return reactQuery.useMutation(({ id }) => {
+    return useMutation(({ id }) => {
         return api.deleteComment(id);
     }, {
         onSuccess: (data) => {
@@ -34386,7 +34359,7 @@ const useDeleteComment = () => {
 
 const useReaction = ({ type }, options = {}) => {
     const api = useApi();
-    return reactQuery.useQuery(['reactions', type], () => {
+    return useQuery(['reactions', type], () => {
         return api.getReaction(type);
     }, {
         enabled: options.enabled,
@@ -34423,8 +34396,8 @@ const addOrIncrement = (reactionType, comment) => {
 };
 const useAddReaction = () => {
     const api = useApi();
-    const queryClient = reactQuery.useQueryClient();
-    return reactQuery.useMutation((payload) => {
+    const queryClient = useQueryClient();
+    return useMutation((payload) => {
         return api.addCommentReaction({
             reaction_type: payload.reactionType,
             comment_id: payload.commentId,
@@ -34462,8 +34435,8 @@ const removeOrDecrement = (reactionType, comment) => {
 };
 const useRemoveReaction = () => {
     const api = useApi();
-    const queryClient = reactQuery.useQueryClient();
-    return reactQuery.useMutation((payload) => {
+    const queryClient = useQueryClient();
+    return useMutation((payload) => {
         return api.removeCommentReaction({
             reaction_type: payload.reactionType,
             comment_id: payload.commentId,
@@ -34483,8 +34456,8 @@ const useRemoveReaction = () => {
 
 const useCommentReactions = ({ commentId, reactionType }, options = {}) => {
     const api = useApi();
-    const queryClient = reactQuery.useQueryClient();
-    return reactQuery.useQuery(['comment-reactions', { commentId, reactionType }], () => {
+    const queryClient = useQueryClient();
+    return useQuery(['comment-reactions', { commentId, reactionType }], () => {
         return api.getCommentReactions({
             comment_id: commentId,
             reaction_type: reactionType,
@@ -34502,8 +34475,8 @@ const useCommentReactions = ({ commentId, reactionType }, options = {}) => {
 
 const useSearchUsers = ({ search }, options = {}) => {
     const api = useApi();
-    const queryClient = reactQuery.useQueryClient();
-    return reactQuery.useQuery(['users', { search }], () => {
+    const queryClient = useQueryClient();
+    return useQuery(['users', { search }], () => {
         return api.searchUsers(search);
     }, {
         enabled: options.enabled,
@@ -34519,22 +34492,22 @@ var useSearchUsers$1 = useSearchUsers;
 
 // Enables updates to default value when using uncontrolled inputs
 const useUncontrolledState = (options) => {
-    const [state, setState] = React.useState({
+    const [state, setState] = useState({
         defaultValue: options.defaultValue,
         value: options.defaultValue,
         key: 0,
     });
-    const setValue = React.useCallback((val) => setState((prev) => (Object.assign(Object.assign({}, prev), { value: val }))), []);
-    const setDefaultValue = React.useCallback((defaultVal) => setState((prev) => ({
+    const setValue = useCallback((val) => setState((prev) => (Object.assign(Object.assign({}, prev), { value: val }))), []);
+    const setDefaultValue = useCallback((defaultVal) => setState((prev) => ({
         key: prev.key + 1,
         value: defaultVal,
         defaultValue: defaultVal,
     })), []);
-    const resetValue = React.useCallback(() => setState((prev) => (Object.assign(Object.assign({}, prev), { value: prev.defaultValue, key: prev.key + 1 }))), []);
-    React.useLayoutEffect(() => {
+    const resetValue = useCallback(() => setState((prev) => (Object.assign(Object.assign({}, prev), { value: prev.defaultValue, key: prev.key + 1 }))), []);
+    useLayoutEffect(() => {
         setDefaultValue(options.defaultValue);
     }, [options.defaultValue]);
-    return React.useMemo(() => (Object.assign(Object.assign({}, state), { setValue,
+    return useMemo(() => (Object.assign(Object.assign({}, state), { setValue,
         setDefaultValue,
         resetValue })), [state]);
 };
@@ -36512,7 +36485,7 @@ const generatePalette = (baseColor) => {
     };
 };
 const useCssPalette = (baseColor, variablePrefix) => {
-    React.useLayoutEffect(() => {
+    useLayoutEffect(() => {
         const palette = generatePalette(baseColor);
         Object.entries(palette).map(([key, val]) => {
             document.documentElement.style.setProperty(`--${variablePrefix}-${key}`, val);
@@ -36532,7 +36505,7 @@ const useCssPalette = (baseColor, variablePrefix) => {
  * @param value the value or function to persist
  */
 function useLatestRef(value) {
-    const ref = React__namespace.useRef(null);
+    const ref = React.useRef(null);
     ref.current = value;
     return ref;
 }
@@ -36542,7 +36515,7 @@ const AuthModal = (_a) => {
     var { visible, onAuthenticate, onClose, view = 'sign_in', title = 'Sign In', description, className } = _a, otherProps = __rest(_a, ["visible", "onAuthenticate", "onClose", "view", "title", "description", "className"]);
     const supabase = useSupabaseClient();
     const onAuthenticateRef = useLatestRef(onAuthenticate);
-    React.useEffect(() => {
+    useEffect(() => {
         const subscription = supabase.auth.onAuthStateChange((ev, session) => {
             var _a;
             if (ev === 'SIGNED_IN' && session) {
@@ -36554,11 +36527,11 @@ const AuthModal = (_a) => {
             (_a = subscription.data) === null || _a === void 0 ? void 0 : _a.unsubscribe();
         };
     }, [supabase]);
-    return (React__default["default"].createElement(ui.Modal, { title: title, description: description, visible: visible, onCancel: onClose, hideFooter: true, size: "medium", className: clsx(' min-w-[300px]', className) },
-        React__default["default"].createElement("div", { className: clsx('w-full', otherProps.providers && ((_b = otherProps.providers) === null || _b === void 0 ? void 0 : _b.length) > 0
+    return (React__default.createElement(Modal, { title: title, description: description, visible: visible, onCancel: onClose, hideFooter: true, size: "medium", className: clsx(' min-w-[300px]', className) },
+        React__default.createElement("div", { className: clsx('w-full', otherProps.providers && ((_b = otherProps.providers) === null || _b === void 0 ? void 0 : _b.length) > 0
                 ? null
                 : '!-mt-4') },
-            React__default["default"].createElement(Auth, Object.assign({}, otherProps, { view: view, supabaseClient: supabase })))));
+            React__default.createElement(Auth, Object.assign({}, otherProps, { view: view, supabaseClient: supabase })))));
 };
 
 function styleInject(css, ref) {
@@ -39628,7 +39601,7 @@ const lowlight = {
   registerAlias
 };
 
-const Editor = React.forwardRef(({ defaultValue, onChange, readOnly = false, autoFocus = false, actions = null, }, ref) => {
+const Editor = forwardRef(({ defaultValue, onChange, readOnly = false, autoFocus = false, actions = null, }, ref) => {
     const context = useCommentsContext();
     const extensions = [
         StarterKit.configure({
@@ -39662,62 +39635,62 @@ const Editor = React.forwardRef(({ defaultValue, onChange, readOnly = false, aut
             },
         },
     });
-    React.useImperativeHandle(ref, () => ({
+    useImperativeHandle(ref, () => ({
         editor: () => {
             return editor;
         },
     }));
     const activeStyles = 'bg-alpha-10';
-    return (React__default["default"].createElement("div", { className: clsx(readOnly ? styles.viewer : styles.editor, 'tiptap-editor text-alpha-80 border-alpha-10 rounded-md') },
-        React__default["default"].createElement(EditorContent, { className: clsx('h-full', readOnly ? null : 'pb-8'), editor: editor }),
-        !readOnly && (React__default["default"].createElement("div", { className: clsx('border-t-2 border-alpha-10', 'absolute bottom-0 left-0 right-0 flex items-center h-8 z-10') },
-            React__default["default"].createElement("div", { className: 'grid w-8 h-full place-items-center cursor-pointer', onMouseDown: (e) => {
+    return (React__default.createElement("div", { className: clsx(readOnly ? styles.viewer : styles.editor, 'tiptap-editor text-alpha-80 border-alpha-10 rounded-md') },
+        React__default.createElement(EditorContent, { className: clsx('h-full', readOnly ? null : 'pb-8'), editor: editor }),
+        !readOnly && (React__default.createElement("div", { className: clsx('border-t-2 border-alpha-10', 'absolute bottom-0 left-0 right-0 flex items-center h-8 z-10') },
+            React__default.createElement("div", { className: 'grid w-8 h-full place-items-center cursor-pointer', onMouseDown: (e) => {
                     editor === null || editor === void 0 ? void 0 : editor.chain().focus().toggleBold().run();
                     e.preventDefault();
                 }, title: "Bold" },
-                React__default["default"].createElement(ui.IconBold, { className: clsx('h-6 w-6 p-1.5 font-bold rounded-full', (editor === null || editor === void 0 ? void 0 : editor.isActive('bold')) && activeStyles) })),
-            React__default["default"].createElement("div", { className: 'grid w-8 h-full place-items-center cursor-pointer', onMouseDown: (e) => {
+                React__default.createElement(IconBold, { className: clsx('h-6 w-6 p-1.5 font-bold rounded-full', (editor === null || editor === void 0 ? void 0 : editor.isActive('bold')) && activeStyles) })),
+            React__default.createElement("div", { className: 'grid w-8 h-full place-items-center cursor-pointer', onMouseDown: (e) => {
                     editor === null || editor === void 0 ? void 0 : editor.chain().focus().toggleItalic().run();
                     e.preventDefault();
                 }, title: "Italic" },
-                React__default["default"].createElement(ui.IconItalic, { className: clsx('h-6 w-6 p-1.5 font-bold rounded-full', (editor === null || editor === void 0 ? void 0 : editor.isActive('italic')) && activeStyles) })),
-            React__default["default"].createElement("div", { className: 'grid w-8 h-full place-items-center cursor-pointer', onMouseDown: (e) => {
+                React__default.createElement(IconItalic, { className: clsx('h-6 w-6 p-1.5 font-bold rounded-full', (editor === null || editor === void 0 ? void 0 : editor.isActive('italic')) && activeStyles) })),
+            React__default.createElement("div", { className: 'grid w-8 h-full place-items-center cursor-pointer', onMouseDown: (e) => {
                     editor === null || editor === void 0 ? void 0 : editor.chain().focus().toggleCodeBlock().run();
                     e.preventDefault();
                 }, title: "Code Block" },
-                React__default["default"].createElement(ui.IconCode, { className: clsx('h-6 w-6 p-1.5 font-bold rounded-full', (editor === null || editor === void 0 ? void 0 : editor.isActive('codeBlock')) && activeStyles) })),
-            React__default["default"].createElement("div", { className: 'grid w-8 h-full place-items-center cursor-pointer', onMouseDown: (e) => {
+                React__default.createElement(IconCode, { className: clsx('h-6 w-6 p-1.5 font-bold rounded-full', (editor === null || editor === void 0 ? void 0 : editor.isActive('codeBlock')) && activeStyles) })),
+            React__default.createElement("div", { className: 'grid w-8 h-full place-items-center cursor-pointer', onMouseDown: (e) => {
                     editor === null || editor === void 0 ? void 0 : editor.chain().focus().toggleBulletList().run();
                     e.preventDefault();
                 }, title: "Bullet List" },
-                React__default["default"].createElement("svg", { stroke: "currentColor", fill: "currentColor", fillOpacity: ".75", className: clsx('h-6 w-6 p-1.5 font-bold rounded-full', (editor === null || editor === void 0 ? void 0 : editor.isActive('bulletList')) && activeStyles), strokeWidth: "0", viewBox: "0 0 1024 1024", height: "1em", width: "1em", xmlns: "http://www.w3.org/2000/svg" },
-                    React__default["default"].createElement("path", { d: "M912 192H328c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 284H328c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 284H328c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM104 228a56 56 0 1 0 112 0 56 56 0 1 0-112 0zm0 284a56 56 0 1 0 112 0 56 56 0 1 0-112 0zm0 284a56 56 0 1 0 112 0 56 56 0 1 0-112 0z" }))),
-            React__default["default"].createElement("div", { className: 'grid w-8 h-full place-items-center cursor-pointer', onMouseDown: (e) => {
+                React__default.createElement("svg", { stroke: "currentColor", fill: "currentColor", fillOpacity: ".75", className: clsx('h-6 w-6 p-1.5 font-bold rounded-full', (editor === null || editor === void 0 ? void 0 : editor.isActive('bulletList')) && activeStyles), strokeWidth: "0", viewBox: "0 0 1024 1024", height: "1em", width: "1em", xmlns: "http://www.w3.org/2000/svg" },
+                    React__default.createElement("path", { d: "M912 192H328c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 284H328c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 284H328c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM104 228a56 56 0 1 0 112 0 56 56 0 1 0-112 0zm0 284a56 56 0 1 0 112 0 56 56 0 1 0-112 0zm0 284a56 56 0 1 0 112 0 56 56 0 1 0-112 0z" }))),
+            React__default.createElement("div", { className: 'grid w-8 h-full place-items-center cursor-pointer', onMouseDown: (e) => {
                     editor === null || editor === void 0 ? void 0 : editor.chain().focus().toggleOrderedList().run();
                     e.preventDefault();
                 }, title: "Numbered List" },
-                React__default["default"].createElement("svg", { stroke: "currentColor", fill: "currentColor", fillOpacity: ".75", className: clsx('h-6 w-6 p-1.5 font-bold rounded-full', (editor === null || editor === void 0 ? void 0 : editor.isActive('orderedList')) && activeStyles), strokeWidth: "0", viewBox: "0 0 1024 1024", height: "1em", width: "1em", xmlns: "http://www.w3.org/2000/svg" },
-                    React__default["default"].createElement("path", { d: "M920 760H336c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0-568H336c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 284H336c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM216 712H100c-2.2 0-4 1.8-4 4v34c0 2.2 1.8 4 4 4h72.4v20.5h-35.7c-2.2 0-4 1.8-4 4v34c0 2.2 1.8 4 4 4h35.7V838H100c-2.2 0-4 1.8-4 4v34c0 2.2 1.8 4 4 4h116c2.2 0 4-1.8 4-4V716c0-2.2-1.8-4-4-4zM100 188h38v120c0 2.2 1.8 4 4 4h40c2.2 0 4-1.8 4-4V152c0-4.4-3.6-8-8-8h-78c-2.2 0-4 1.8-4 4v36c0 2.2 1.8 4 4 4zm116 240H100c-2.2 0-4 1.8-4 4v36c0 2.2 1.8 4 4 4h68.4l-70.3 77.7a8.3 8.3 0 0 0-2.1 5.4V592c0 2.2 1.8 4 4 4h116c2.2 0 4-1.8 4-4v-36c0-2.2-1.8-4-4-4h-68.4l70.3-77.7a8.3 8.3 0 0 0 2.1-5.4V432c0-2.2-1.8-4-4-4z" }))),
-            React__default["default"].createElement("div", { className: "flex-1" }),
-            React__default["default"].createElement("div", null, actions)))));
+                React__default.createElement("svg", { stroke: "currentColor", fill: "currentColor", fillOpacity: ".75", className: clsx('h-6 w-6 p-1.5 font-bold rounded-full', (editor === null || editor === void 0 ? void 0 : editor.isActive('orderedList')) && activeStyles), strokeWidth: "0", viewBox: "0 0 1024 1024", height: "1em", width: "1em", xmlns: "http://www.w3.org/2000/svg" },
+                    React__default.createElement("path", { d: "M920 760H336c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0-568H336c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 284H336c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM216 712H100c-2.2 0-4 1.8-4 4v34c0 2.2 1.8 4 4 4h72.4v20.5h-35.7c-2.2 0-4 1.8-4 4v34c0 2.2 1.8 4 4 4h35.7V838H100c-2.2 0-4 1.8-4 4v34c0 2.2 1.8 4 4 4h116c2.2 0 4-1.8 4-4V716c0-2.2-1.8-4-4-4zM100 188h38v120c0 2.2 1.8 4 4 4h40c2.2 0 4-1.8 4-4V152c0-4.4-3.6-8-8-8h-78c-2.2 0-4 1.8-4 4v36c0 2.2 1.8 4 4 4zm116 240H100c-2.2 0-4 1.8-4 4v36c0 2.2 1.8 4 4 4h68.4l-70.3 77.7a8.3 8.3 0 0 0-2.1 5.4V592c0 2.2 1.8 4 4 4h116c2.2 0 4-1.8 4-4v-36c0-2.2-1.8-4-4-4h-68.4l70.3-77.7a8.3 8.3 0 0 0 2.1-5.4V432c0-2.2-1.8-4-4-4z" }))),
+            React__default.createElement("div", { className: "flex-1" }),
+            React__default.createElement("div", null, actions)))));
 });
 
-const ReplyManagerContext = React.createContext(null);
+const ReplyManagerContext = createContext(null);
 const useReplyManager = () => {
-    return React.useContext(ReplyManagerContext);
+    return useContext(ReplyManagerContext);
 };
 const ReplyManagerProvider = ({ children }) => {
-    const [replyingTo, setReplyingTo] = React.useState(null);
-    const api = React.useMemo(() => ({
+    const [replyingTo, setReplyingTo] = useState(null);
+    const api = useMemo(() => ({
         replyingTo,
         setReplyingTo,
     }), [replyingTo, setReplyingTo]);
-    return (React__default["default"].createElement(ReplyManagerContext.Provider, { value: api }, children));
+    return (React__default.createElement(ReplyManagerContext.Provider, { value: api }, children));
 };
 
 // run callback if authenticated
 const useAuthUtils = () => {
-    const auth = ui.Auth.useUser();
+    const auth = Auth$1.useUser();
     const { onAuthRequested } = useCommentsContext();
     const isAuthenticated = !!auth.session;
     const runIfAuthenticated = (callback) => {
@@ -39774,30 +39747,30 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.tz.setDefault(dayjs.tz.guess());
 const CommentMenu = ({ onEdit, onDelete }) => {
-    return (React__default["default"].createElement(ui.Dropdown, { overlay: [
-            React__default["default"].createElement(ui.Dropdown.Item, { key: "edit", onClick: () => onEdit() },
-                React__default["default"].createElement(ui.Typography.Text, { className: "text-sm" }, "Edit")),
-            React__default["default"].createElement(ui.Dropdown.Item, { key: "delete", onClick: () => onDelete() },
-                React__default["default"].createElement(ui.Typography.Text, { className: "text-sm" }, "Delete")),
+    return (React__default.createElement(Dropdown, { overlay: [
+            React__default.createElement(Dropdown.Item, { key: "edit", onClick: () => onEdit() },
+                React__default.createElement(Typography.Text, { className: "text-sm" }, "Edit")),
+            React__default.createElement(Dropdown.Item, { key: "delete", onClick: () => onDelete() },
+                React__default.createElement(Typography.Text, { className: "text-sm" }, "Delete")),
         ] },
-        React__default["default"].createElement(ui.IconMoreVertical, { className: "h-7 px-0.5 py-1.5" })));
+        React__default.createElement(IconMoreVertical, { className: "h-7 px-0.5 py-1.5" })));
 };
 const Comment = ({ id }) => {
     const query = useComment({ id });
-    return (React__default["default"].createElement("div", { className: "space-y-1" },
-        query.isLoading && (React__default["default"].createElement("div", { className: "grid p-4 place-items-center" },
-            React__default["default"].createElement("div", { className: "mr-4" },
-                React__default["default"].createElement(ui.Loading, { active: true }, null)))),
-        query.data && !query.data.parent_id && (React__default["default"].createElement(ReplyManagerProvider, null,
-            React__default["default"].createElement(CommentData, { comment: query.data }))),
-        query.data && query.data.parent_id && (React__default["default"].createElement(CommentData, { comment: query.data }))));
+    return (React__default.createElement("div", { className: "space-y-1" },
+        query.isLoading && (React__default.createElement("div", { className: "grid p-4 place-items-center" },
+            React__default.createElement("div", { className: "mr-4" },
+                React__default.createElement(Loading, { active: true }, null)))),
+        query.data && !query.data.parent_id && (React__default.createElement(ReplyManagerProvider, null,
+            React__default.createElement(CommentData, { comment: query.data }))),
+        query.data && query.data.parent_id && (React__default.createElement(CommentData, { comment: query.data }))));
 };
 const CommentData = ({ comment }) => {
     var _a, _b, _c, _d;
-    const editorRef = React.useRef(null);
+    const editorRef = useRef(null);
     const context = useCommentsContext();
-    const [editing, setEditing] = React.useState(false);
-    const [repliesVisible, setRepliesVisible] = React.useState(false);
+    const [editing, setEditing] = useState(false);
+    const [repliesVisible, setRepliesVisible] = useState(false);
     const commentState = useUncontrolledState({ defaultValue: comment.comment });
     const replyManager = useReplyManager();
     const mutations = {
@@ -39808,7 +39781,7 @@ const CommentData = ({ comment }) => {
     };
     const { isAuthenticated, runIfAuthenticated, auth } = useAuthUtils();
     const isReplyingTo = ((_a = replyManager === null || replyManager === void 0 ? void 0 : replyManager.replyingTo) === null || _a === void 0 ? void 0 : _a.id) === comment.id;
-    React.useEffect(() => {
+    useEffect(() => {
         if (comment.parent_id) {
             return;
         }
@@ -39821,7 +39794,7 @@ const CommentData = ({ comment }) => {
             setRepliesVisible(false);
         }
     }, [replyManager === null || replyManager === void 0 ? void 0 : replyManager.replyingTo, comment.parent_id]);
-    React.useEffect(() => {
+    useEffect(() => {
         if (mutations.updateComment.isSuccess) {
             setEditing(false);
         }
@@ -39849,64 +39822,64 @@ const CommentData = ({ comment }) => {
             }
         });
     };
-    return (React__default["default"].createElement("div", { className: "flex space-x-2 sce-comment" },
-        React__default["default"].createElement("div", { className: "min-w-fit sce-comment-avatar" },
-            React__default["default"].createElement(User, { id: comment.user.id, showAvatar: true, showName: false })),
-        React__default["default"].createElement("div", { className: "flex-1 space-y-2" },
-            React__default["default"].createElement("div", { className: "relative p-3 py-2 rounded-md sce-comment-body bg-alpha-5 text-alpha-90" },
-                React__default["default"].createElement("div", { className: "absolute top-0 right-0" }, comment.user_id === ((_b = auth === null || auth === void 0 ? void 0 : auth.user) === null || _b === void 0 ? void 0 : _b.id) && (React__default["default"].createElement(CommentMenu, { onEdit: () => {
+    return (React__default.createElement("div", { className: "flex space-x-2 sce-comment" },
+        React__default.createElement("div", { className: "min-w-fit sce-comment-avatar" },
+            React__default.createElement(User, { id: comment.user.id, showAvatar: true, showName: false })),
+        React__default.createElement("div", { className: "flex-1 space-y-2" },
+            React__default.createElement("div", { className: "relative p-3 py-2 rounded-md sce-comment-body bg-alpha-5 text-alpha-90" },
+                React__default.createElement("div", { className: "absolute top-0 right-0" }, comment.user_id === ((_b = auth === null || auth === void 0 ? void 0 : auth.user) === null || _b === void 0 ? void 0 : _b.id) && (React__default.createElement(CommentMenu, { onEdit: () => {
                         setEditing(true);
                     }, onDelete: () => {
                         mutations.deleteComment.mutate({ id: comment.id });
                     } }))),
-                React__default["default"].createElement("p", null,
-                    React__default["default"].createElement("span", { className: "font-bold cursor-pointer", onClick: () => {
+                React__default.createElement("p", null,
+                    React__default.createElement("span", { className: "font-bold cursor-pointer", onClick: () => {
                             var _a;
                             (_a = context.onUserClick) === null || _a === void 0 ? void 0 : _a.call(context, comment.user);
                         } }, comment.user.name)),
-                React__default["default"].createElement("p", null,
-                    !editing && (React__default["default"].createElement(Editor, { key: comment.comment, defaultValue: comment.comment, readOnly: true })),
-                    editing && (React__default["default"].createElement(Editor, { ref: editorRef, key: commentState.key, defaultValue: commentState.defaultValue, onChange: (val) => {
+                React__default.createElement("p", null,
+                    !editing && (React__default.createElement(Editor, { key: comment.comment, defaultValue: comment.comment, readOnly: true })),
+                    editing && (React__default.createElement(Editor, { ref: editorRef, key: commentState.key, defaultValue: commentState.defaultValue, onChange: (val) => {
                             commentState.setValue(val);
-                        }, autoFocus: !!(replyManager === null || replyManager === void 0 ? void 0 : replyManager.replyingTo), actions: React__default["default"].createElement("div", { className: "flex mx-[3px] space-x-[3px]" },
-                            React__default["default"].createElement(ui.Button, { onClick: () => {
+                        }, autoFocus: !!(replyManager === null || replyManager === void 0 ? void 0 : replyManager.replyingTo), actions: React__default.createElement("div", { className: "flex mx-[3px] space-x-[3px]" },
+                            React__default.createElement(Button, { onClick: () => {
                                     setEditing(false);
                                 }, size: "tiny", className: "!px-[6px] !py-[3px]", type: "secondary" }, "Cancel"),
-                            React__default["default"].createElement(ui.Button, { onClick: () => {
+                            React__default.createElement(Button, { onClick: () => {
                                     mutations.updateComment.mutate({
                                         id: comment.id,
                                         comment: commentState.value,
                                         mentionedUserIds: getMentionedUserIds(commentState.value),
                                     });
                                 }, loading: mutations.updateComment.isLoading, size: "tiny", className: "!px-[6px] !py-[3px]", disabled: (_d = (_c = editorRef.current) === null || _c === void 0 ? void 0 : _c.editor()) === null || _d === void 0 ? void 0 : _d.isEmpty }, "Save")) }))),
-                React__default["default"].createElement("div", { className: "text-sm text-alpha-40" }, dayjs().diff(comment.created_at, 'seconds', true) < 30
+                React__default.createElement("div", { className: "text-sm text-alpha-40" }, dayjs().diff(comment.created_at, 'seconds', true) < 30
                     ? 'just now'
                     : dayjs(comment.created_at).fromNow())),
-            React__default["default"].createElement("div", { className: "flex items-center justify-between" },
-                React__default["default"].createElement("div", { className: "relative h-6 sce-comment-reactions" },
-                    React__default["default"].createElement(context.components.CommentReactions, { toggleReaction: toggleReaction, activeReactions: activeReactions, reactionsMetadata: comment.reactions_metadata })),
-                React__default["default"].createElement("div", { className: "flex space-x-3 text-sm text-alpha-40" },
-                    !isReply && (React__default["default"].createElement("div", { onClick: () => setRepliesVisible((prev) => !prev), className: "cursor-pointer", tabIndex: 0 },
-                        !repliesVisible && (React__default["default"].createElement("p", null,
+            React__default.createElement("div", { className: "flex items-center justify-between" },
+                React__default.createElement("div", { className: "relative h-6 sce-comment-reactions" },
+                    React__default.createElement(context.components.CommentReactions, { toggleReaction: toggleReaction, activeReactions: activeReactions, reactionsMetadata: comment.reactions_metadata })),
+                React__default.createElement("div", { className: "flex space-x-3 text-sm text-alpha-40" },
+                    !isReply && (React__default.createElement("div", { onClick: () => setRepliesVisible((prev) => !prev), className: "cursor-pointer", tabIndex: 0 },
+                        !repliesVisible && (React__default.createElement("p", null,
                             "view replies (",
                             comment.replies_count,
                             ")")),
-                        repliesVisible && React__default["default"].createElement("p", null, "hide replies"))),
-                    !isReplyingTo && (React__default["default"].createElement("p", { tabIndex: 0, className: "cursor-pointer", onClick: () => {
+                        repliesVisible && React__default.createElement("p", null, "hide replies"))),
+                    !isReplyingTo && (React__default.createElement("p", { tabIndex: 0, className: "cursor-pointer", onClick: () => {
                             replyManager === null || replyManager === void 0 ? void 0 : replyManager.setReplyingTo(comment);
                         } }, "reply")),
-                    isReplyingTo && (React__default["default"].createElement("p", { tabIndex: 0, className: "cursor-pointer", onClick: () => {
+                    isReplyingTo && (React__default.createElement("p", { tabIndex: 0, className: "cursor-pointer", onClick: () => {
                             replyManager === null || replyManager === void 0 ? void 0 : replyManager.setReplyingTo(null);
                         } }, "cancel")))),
-            React__default["default"].createElement("div", null, repliesVisible && !isReply && (React__default["default"].createElement("div", { className: "my-3" },
-                React__default["default"].createElement(Comments, { topic: comment.topic, parentId: comment.id })))))));
+            React__default.createElement("div", null, repliesVisible && !isReply && (React__default.createElement("div", { className: "my-3" },
+                React__default.createElement(Comments, { topic: comment.topic, parentId: comment.id })))))));
 };
 
 const Comments = ({ topic, parentId = null }) => {
     var _a, _b, _c, _d;
-    const editorRef = React.useRef(null);
+    const editorRef = useRef(null);
     const context = useCommentsContext();
-    const [layoutReady, setLayoutReady] = React.useState(false);
+    const [layoutReady, setLayoutReady] = useState(false);
     const replyManager = useReplyManager();
     const commentState = useUncontrolledState({ defaultValue: '' });
     const { auth, isAuthenticated, runIfAuthenticated } = useAuthUtils();
@@ -39920,7 +39893,7 @@ const Comments = ({ topic, parentId = null }) => {
     };
     // preload reactions
     useReactions();
-    React.useEffect(() => {
+    useEffect(() => {
         if (replyManager === null || replyManager === void 0 ? void 0 : replyManager.replyingTo) {
             commentState.setDefaultValue(`<span data-type="mention" data-id="${replyManager === null || replyManager === void 0 ? void 0 : replyManager.replyingTo.user.id}" data-label="${replyManager === null || replyManager === void 0 ? void 0 : replyManager.replyingTo.user.name}" contenteditable="false"></span><span>&nbsp</span>`);
         }
@@ -39934,7 +39907,7 @@ const Comments = ({ topic, parentId = null }) => {
             commentState.setDefaultValue('');
         }
     }, [mutations.addComment.isSuccess]);
-    React.useEffect(() => {
+    useEffect(() => {
         if (queries.comments.isSuccess) {
             // this is neccessary because tiptap on first render has different height than on second render
             // which causes layout shift. this just hides content on the first render to avoid ugly layout
@@ -39943,24 +39916,24 @@ const Comments = ({ topic, parentId = null }) => {
         }
     }, [queries.comments.isSuccess]);
     const user = queries.user.data;
-    return (React__default["default"].createElement("div", { className: clsx(context.mode, 'sce-comments relative') },
-        queries.comments.isLoading && (React__default["default"].createElement("div", { className: "grid p-4 place-items-center" },
-            React__default["default"].createElement("div", { className: "mr-4" },
-                React__default["default"].createElement(ui.Loading, { active: true }, null)))),
-        queries.comments.isError && (React__default["default"].createElement("div", { className: "grid p-4 place-items-center" },
-            React__default["default"].createElement("div", { className: "flex flex-col items-center space-y-0.5 text-center" },
-                React__default["default"].createElement(ui.Typography.Text, null,
-                    React__default["default"].createElement(ui.IconAlertCircle, null)),
-                React__default["default"].createElement(ui.Typography.Text, null, "Unable to load comments.")))),
-        queries.comments.data && (React__default["default"].createElement("div", { className: clsx('relative space-y-1 rounded-md', !layoutReady ? 'invisible' : 'visible') },
-            React__default["default"].createElement("div", { className: "space-y-1" }, queries.comments.data.map((comment) => (React__default["default"].createElement(Comment, { key: comment.id, id: comment.id })))),
-            React__default["default"].createElement("div", { className: "flex space-x-2" },
-                React__default["default"].createElement("div", { className: "min-w-fit" },
-                    React__default["default"].createElement(User, { id: user === null || user === void 0 ? void 0 : user.id, showAvatar: true, showName: false })),
-                React__default["default"].createElement("div", { className: "flex-1" },
-                    React__default["default"].createElement(Editor, { ref: editorRef, key: commentState.key, defaultValue: commentState.defaultValue, onChange: (val) => {
+    return (React__default.createElement("div", { className: clsx(context.mode, 'sce-comments relative') },
+        queries.comments.isLoading && (React__default.createElement("div", { className: "grid p-4 place-items-center" },
+            React__default.createElement("div", { className: "mr-4" },
+                React__default.createElement(Loading, { active: true }, null)))),
+        queries.comments.isError && (React__default.createElement("div", { className: "grid p-4 place-items-center" },
+            React__default.createElement("div", { className: "flex flex-col items-center space-y-0.5 text-center" },
+                React__default.createElement(Typography.Text, null,
+                    React__default.createElement(IconAlertCircle, null)),
+                React__default.createElement(Typography.Text, null, "Unable to load comments.")))),
+        queries.comments.data && (React__default.createElement("div", { className: clsx('relative space-y-1 rounded-md', !layoutReady ? 'invisible' : 'visible') },
+            React__default.createElement("div", { className: "space-y-1" }, queries.comments.data.map((comment) => (React__default.createElement(Comment, { key: comment.id, id: comment.id })))),
+            React__default.createElement("div", { className: "flex space-x-2" },
+                React__default.createElement("div", { className: "min-w-fit" },
+                    React__default.createElement(User, { id: user === null || user === void 0 ? void 0 : user.id, showAvatar: true, showName: false })),
+                React__default.createElement("div", { className: "flex-1" },
+                    React__default.createElement(Editor, { ref: editorRef, key: commentState.key, defaultValue: commentState.defaultValue, onChange: (val) => {
                             commentState.setValue(val);
-                        }, autoFocus: !!(replyManager === null || replyManager === void 0 ? void 0 : replyManager.replyingTo), actions: React__default["default"].createElement(ui.Button, { onClick: () => {
+                        }, autoFocus: !!(replyManager === null || replyManager === void 0 ? void 0 : replyManager.replyingTo), actions: React__default.createElement(Button, { onClick: () => {
                                 runIfAuthenticated(() => {
                                     mutations.addComment.mutate({
                                         topic,
@@ -39975,29 +39948,5 @@ const Comments = ({ topic, parentId = null }) => {
 var css_248z = "/*! tailwindcss v3.2.2 | MIT License | https://tailwindcss.com*/*,:after,:before{border:0 solid #e5e7eb;box-sizing:border-box}:after,:before{--tw-content:\"\"}html{-webkit-text-size-adjust:100%;font-feature-settings:normal;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;line-height:1.5;-moz-tab-size:4;-o-tab-size:4;tab-size:4}body{line-height:inherit;margin:0}hr{border-top-width:1px;color:inherit;height:0}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{border-collapse:collapse;border-color:inherit;text-indent:0}button,input,optgroup,select,textarea{color:inherit;font-family:inherit;font-size:100%;font-weight:inherit;line-height:inherit;margin:0;padding:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0}fieldset,legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}textarea{resize:vertical}input::-moz-placeholder,textarea::-moz-placeholder{color:#9ca3af;opacity:1}input::placeholder,textarea::placeholder{color:#9ca3af;opacity:1}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{height:auto;max-width:100%}[hidden]{display:none}*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: }.visible{visibility:visible}.invisible{visibility:hidden}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.inset-0{bottom:0;left:0;right:0;top:0}.top-0{top:0}.right-0{right:0}.bottom-0{bottom:0}.left-0{left:0}.-z-10{z-index:-10}.z-10{z-index:10}.m-\\[3px\\]{margin:3px}.mx-\\[3px\\]{margin-left:3px;margin-right:3px}.my-3{margin-bottom:.75rem;margin-top:.75rem}.\\!-mt-4{margin-top:-1rem!important}.mr-4{margin-right:1rem}.-ml-2{margin-left:-.5rem}.block{display:block}.inline-block{display:inline-block}.flex{display:flex}.grid{display:grid}.h-6{height:1.5rem}.h-10{height:2.5rem}.h-full{height:100%}.h-7{height:1.75rem}.h-8{height:2rem}.h-4{height:1rem}.h-\\[22px\\]{height:22px}.h-\\[12px\\]{height:12px}.max-h-\\[320px\\]{max-height:320px}.w-full{width:100%}.w-6{width:1.5rem}.w-10{width:2.5rem}.w-8{width:2rem}.w-4{width:1rem}.w-\\[22px\\]{width:22px}.w-\\[12px\\]{width:12px}.min-w-\\[300px\\]{min-width:300px}.min-w-fit{min-width:-moz-fit-content;min-width:fit-content}.flex-1{flex:1 1 0%}.cursor-pointer{cursor:pointer}.flex-col{flex-direction:column}.place-items-center{place-items:center}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.space-y-1>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-bottom:calc(.25rem*var(--tw-space-y-reverse));margin-top:calc(.25rem*(1 - var(--tw-space-y-reverse)))}.space-x-2>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-left:calc(.5rem*(1 - var(--tw-space-x-reverse)));margin-right:calc(.5rem*var(--tw-space-x-reverse))}.space-y-2>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-bottom:calc(.5rem*var(--tw-space-y-reverse));margin-top:calc(.5rem*(1 - var(--tw-space-y-reverse)))}.space-x-\\[3px\\]>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-left:calc(3px*(1 - var(--tw-space-x-reverse)));margin-right:calc(3px*var(--tw-space-x-reverse))}.space-x-3>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-left:calc(.75rem*(1 - var(--tw-space-x-reverse)));margin-right:calc(.75rem*var(--tw-space-x-reverse))}.space-y-3>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-bottom:calc(.75rem*var(--tw-space-y-reverse));margin-top:calc(.75rem*(1 - var(--tw-space-y-reverse)))}.space-y-0\\.5>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-bottom:calc(.125rem*var(--tw-space-y-reverse));margin-top:calc(.125rem*(1 - var(--tw-space-y-reverse)))}.space-y-0>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-bottom:calc(0px*var(--tw-space-y-reverse));margin-top:calc(0px*(1 - var(--tw-space-y-reverse)))}.overflow-hidden{overflow:hidden}.overflow-y-auto{overflow-y:auto}.rounded-full{border-radius:9999px}.rounded-md{border-radius:.375rem}.rounded-lg{border-radius:.5rem}.border-2{border-width:2px}.border-t-2{border-top-width:2px}.border-\\[color\\:var\\(--sce-accent-200\\)\\]{border-color:var(--sce-accent-200)}.border-transparent{border-color:transparent}.bg-\\[color\\:var\\(--sce-accent-50\\)\\]{background-color:var(--sce-accent-50)}.bg-transparent{background-color:transparent}.bg-neutral-100{--tw-bg-opacity:1;background-color:rgb(245 245 245/var(--tw-bg-opacity))}.object-cover{-o-object-fit:cover;object-fit:cover}.p-4{padding:1rem}.p-3{padding:.75rem}.p-1\\.5{padding:.375rem}.p-1{padding:.25rem}.p-0\\.5{padding:.125rem}.p-0{padding:0}.px-0\\.5{padding-left:.125rem;padding-right:.125rem}.py-1\\.5{padding-bottom:.375rem;padding-top:.375rem}.px-0{padding-left:0;padding-right:0}.py-1{padding-bottom:.25rem;padding-top:.25rem}.py-2{padding-bottom:.5rem;padding-top:.5rem}.\\!px-\\[6px\\]{padding-left:6px!important;padding-right:6px!important}.\\!py-\\[3px\\]{padding-bottom:3px!important;padding-top:3px!important}.py-0\\.5{padding-bottom:.125rem;padding-top:.125rem}.px-1{padding-left:.25rem;padding-right:.25rem}.py-0{padding-bottom:0;padding-top:0}.px-4{padding-left:1rem;padding-right:1rem}.pr-1{padding-right:.25rem}.pb-8{padding-bottom:2rem}.text-center{text-align:center}.text-sm{font-size:.875rem;line-height:1.25rem}.text-xs{font-size:.75rem;line-height:1rem}.font-bold{font-weight:700}.italic{font-style:italic}.text-\\[color\\:var\\(--sce-accent-900\\)\\]{color:var(--sce-accent-900)}.shadow{--tw-shadow:0 1px 3px 0 rgba(0,0,0,.1),0 1px 2px -1px rgba(0,0,0,.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color),0 1px 2px -1px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.filter{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.sce-comments .sbui-loading-spinner{color:var(--sce-accent-400)!important}.tiptap-editor .mention{border:1px solid rgba(0,0,0,.2);border-radius:8px;font-size:.92rem;font-weight:400;padding:2px 3px;-webkit-user-select:text!important;-moz-user-select:text!important;user-select:text!important}.dark .tiptap-editor .mention{border:1px solid hsla(0,0%,100%,.2)}.tiptap-editor code{background-color:rgba(#616161,.1);color:#616161}.tiptap-editor pre{margin:.25rem 0!important}.tiptap-editor pre code{background:none;color:inherit;font-size:.8rem;padding:0}.tiptap-editor pre{background:#0d0d0d;border-radius:.5rem;color:#fff;font-family:JetBrainsMono,monospace;padding:.75rem 1rem}.tiptap-editor code{background:none;color:inherit;font-size:.8rem;padding:0}.hljs-quote,.tiptap-editor .hljs-comment{color:#616161!important}.hljs-attribute,.hljs-link,.hljs-name,.hljs-regexp,.hljs-selector-class,.hljs-selector-id,.hljs-tag,.hljs-template-variable,.tiptap-editor .hljs-variable{color:#f98181!important}.hljs-built_in,.hljs-builtin-name,.hljs-literal,.hljs-meta,.hljs-params,.hljs-type,.tiptap-editor .hljs-number{color:#fbbc88!important}.hljs-bullet,.hljs-symbol,.tiptap-editor .hljs-string{color:#b9f18d!important}.hljs-section,.tiptap-editor .hljs-title{color:#fad594!important}.hljs-selector-tag,.tiptap-editor .hljs-keyword{color:#70cff8!important}.tiptap-editor .hljs-emphasis{font-style:italic!important}.tiptap-editor .hljs-strong{font-weight:700}.tiptap-editor .tiptap-link{filter:brightness(110%);text-decoration:underline}.ProseMirror p.is-editor-empty:first-child:before{--tw-text-opacity:0.4!important;color:rgba(0,0,0,var(--tw-text-opacity));content:attr(data-placeholder);font-size:1rem;left:8px;pointer-events:none;position:absolute;top:8px}.dark .ProseMirror p.is-editor-empty:first-child:before{color:rgba(255,255,255,var(--tw-text-opacity))}.tiptap-editor ul{list-style-type:disc;padding:0 1rem}.tiptap-editor ol{list-style-type:decimal;padding:0 1rem}.text-alpha{color:rgba(0,0,0,var(--tw-text-opacity))}.dark .text-alpha{color:rgba(255,255,255,var(--tw-text-opacity))}.text-alpha-10{--tw-text-opacity:0.1!important;color:rgba(0,0,0,var(--tw-text-opacity))}.dark .text-alpha-10{color:rgba(255,255,255,var(--tw-text-opacity))}.text-alpha-20{--tw-text-opacity:0.2!important;color:rgba(0,0,0,var(--tw-text-opacity))}.dark .text-alpha-20{color:rgba(255,255,255,var(--tw-text-opacity))}.text-alpha-30{--tw-text-opacity:0.3!important;color:rgba(0,0,0,var(--tw-text-opacity))}.dark .text-alpha-30{color:rgba(255,255,255,var(--tw-text-opacity))}.text-alpha-40{--tw-text-opacity:0.4!important;color:rgba(0,0,0,var(--tw-text-opacity))}.dark .text-alpha-40{color:rgba(255,255,255,var(--tw-text-opacity))}.text-alpha-50{--tw-text-opacity:0.5!important;color:rgba(0,0,0,var(--tw-text-opacity))}.dark .text-alpha-50{color:rgba(255,255,255,var(--tw-text-opacity))}.text-alpha-60{--tw-text-opacity:0.6!important;color:rgba(0,0,0,var(--tw-text-opacity))}.dark .text-alpha-60{color:rgba(255,255,255,var(--tw-text-opacity))}.text-alpha-70{--tw-text-opacity:0.7!important;color:rgba(0,0,0,var(--tw-text-opacity))}.dark .text-alpha-70{color:rgba(255,255,255,var(--tw-text-opacity))}.text-alpha-80{--tw-text-opacity:0.8!important;color:rgba(0,0,0,var(--tw-text-opacity))}.dark .text-alpha-80{color:rgba(255,255,255,var(--tw-text-opacity))}.text-alpha-90{--tw-text-opacity:0.9!important;color:rgba(0,0,0,var(--tw-text-opacity))}.dark .text-alpha-90{color:rgba(255,255,255,var(--tw-text-opacity))}.text-alpha-100{--tw-text-opacity:1!important;color:rgba(0,0,0,var(--tw-text-opacity))}.dark .text-alpha-100{color:rgba(255,255,255,var(--tw-text-opacity))}.border-alpha{border-color:rgba(0,0,0,var(--tw-border-opacity))}.dark .border-alpha{border-color:rgba(255,255,255,var(--tw-border-opacity))}.border-alpha-10{--tw-border-opacity:0.1!important;border-color:rgba(0,0,0,var(--tw-border-opacity))}.dark .border-alpha-10{border-color:rgba(255,255,255,var(--tw-border-opacity))}.border-alpha-20{--tw-border-opacity:0.2!important;border-color:rgba(0,0,0,var(--tw-border-opacity))}.dark .border-alpha-20{border-color:rgba(255,255,255,var(--tw-border-opacity))}.border-alpha-30{--tw-border-opacity:0.3!important;border-color:rgba(0,0,0,var(--tw-border-opacity))}.dark .border-alpha-30{border-color:rgba(255,255,255,var(--tw-border-opacity))}.border-alpha-40{--tw-border-opacity:0.4!important;border-color:rgba(0,0,0,var(--tw-border-opacity))}.dark .border-alpha-40{border-color:rgba(255,255,255,var(--tw-border-opacity))}.border-alpha-50{--tw-border-opacity:0.5!important;border-color:rgba(0,0,0,var(--tw-border-opacity))}.dark .border-alpha-50{border-color:rgba(255,255,255,var(--tw-border-opacity))}.border-alpha-60{--tw-border-opacity:0.6!important;border-color:rgba(0,0,0,var(--tw-border-opacity))}.dark .border-alpha-60{border-color:rgba(255,255,255,var(--tw-border-opacity))}.border-alpha-70{--tw-border-opacity:0.7!important;border-color:rgba(0,0,0,var(--tw-border-opacity))}.dark .border-alpha-70{border-color:rgba(255,255,255,var(--tw-border-opacity))}.border-alpha-80{--tw-border-opacity:0.8!important;border-color:rgba(0,0,0,var(--tw-border-opacity))}.dark .border-alpha-80{border-color:rgba(255,255,255,var(--tw-border-opacity))}.border-alpha-90{--tw-border-opacity:0.9!important;border-color:rgba(0,0,0,var(--tw-border-opacity))}.dark .border-alpha-90{border-color:rgba(255,255,255,var(--tw-border-opacity))}.border-alpha-100{--tw-border-opacity:1!important;border-color:rgba(0,0,0,var(--tw-border-opacity))}.dark .border-alpha-100{border-color:rgba(255,255,255,var(--tw-border-opacity))}.bg-alpha{background-color:rgba(0,0,0,var(--tw-bg-opacity))}.dark .bg-alpha{background-color:rgba(255,255,255,var(--tw-bg-opacity))}.bg-alpha-5{--tw-bg-opacity:0.05!important;background-color:rgba(0,0,0,var(--tw-bg-opacity))}.dark .bg-alpha-5{background-color:rgba(255,255,255,var(--tw-bg-opacity))}.bg-alpha-10{--tw-bg-opacity:0.1!important;background-color:rgba(0,0,0,var(--tw-bg-opacity))}.dark .bg-alpha-10{background-color:rgba(255,255,255,var(--tw-bg-opacity))}.bg-alpha-20{--tw-bg-opacity:0.2!important;background-color:rgba(0,0,0,var(--tw-bg-opacity))}.dark .bg-alpha-20{background-color:rgba(255,255,255,var(--tw-bg-opacity))}.bg-alpha-30{--tw-bg-opacity:0.3!important;background-color:rgba(0,0,0,var(--tw-bg-opacity))}.dark .bg-alpha-30{background-color:rgba(255,255,255,var(--tw-bg-opacity))}.bg-alpha-40{--tw-bg-opacity:0.4!important;background-color:rgba(0,0,0,var(--tw-bg-opacity))}.dark .bg-alpha-40{background-color:rgba(255,255,255,var(--tw-bg-opacity))}.bg-alpha-50{--tw-bg-opacity:0.5!important;background-color:rgba(0,0,0,var(--tw-bg-opacity))}.dark .bg-alpha-50{background-color:rgba(255,255,255,var(--tw-bg-opacity))}.bg-alpha-60{--tw-bg-opacity:0.6!important;background-color:rgba(0,0,0,var(--tw-bg-opacity))}.dark .bg-alpha-60{background-color:rgba(255,255,255,var(--tw-bg-opacity))}.bg-alpha-70{--tw-bg-opacity:0.7!important;background-color:rgba(0,0,0,var(--tw-bg-opacity))}.dark .bg-alpha-70{background-color:rgba(255,255,255,var(--tw-bg-opacity))}.bg-alpha-80{--tw-bg-opacity:0.8!important;background-color:rgba(0,0,0,var(--tw-bg-opacity))}.dark .bg-alpha-80{background-color:rgba(255,255,255,var(--tw-bg-opacity))}.bg-alpha-90{--tw-bg-opacity:0.9!important;background-color:rgba(0,0,0,var(--tw-bg-opacity))}.dark .bg-alpha-90{background-color:rgba(255,255,255,var(--tw-bg-opacity))}.bg-alpha-100{--tw-bg-opacity:1!important;background-color:rgba(0,0,0,var(--tw-bg-opacity))}.dark .bg-alpha-100{background-color:rgba(255,255,255,var(--tw-bg-opacity))}.tiptap-editor .sbui-btn:disabled{opacity:.66}.tiptap-editor .sbui-btn-primary{background-color:var(--sce-accent-500)!important;color:var(--sce-accent-50)!important}.tiptap-editor .sbui-btn-primary:hover{background-color:var(--sce-accent-400)!important}.dark .tiptap-editor .sbui-btn-primary:hover{background-color:var(--sce-accent-600)!important}.dark .dark\\:border-\\[color\\:var\\(--sce-accent-600\\)\\]{border-color:var(--sce-accent-600)}.dark .dark\\:bg-\\[color\\:var\\(--sce-accent-900\\)\\]{background-color:var(--sce-accent-900)}.dark .dark\\:bg-neutral-800{--tw-bg-opacity:1;background-color:rgb(38 38 38/var(--tw-bg-opacity))}.dark .dark\\:text-\\[color\\:var\\(--sce-accent-50\\)\\]{color:var(--sce-accent-50)}";
 styleInject(css_248z,{"insertAt":"top"});
 
-exports.Auth = Auth;
-exports.AuthModal = AuthModal;
-exports.Avatar = Avatar;
-exports.Comment = Comment;
-exports.CommentReaction = CommentReaction;
-exports.CommentReactions = CommentReactions;
-exports.Comments = Comments;
-exports.CommentsProvider = CommentsProvider;
-exports.Reaction = Reaction;
-exports.ReactionSelector = ReactionSelector;
-exports.User = User;
-exports.useAddComment = useAddComment;
-exports.useAddReaction = useAddReaction;
-exports.useComment = useComment;
-exports.useCommentReactions = useCommentReactions;
-exports.useComments = useComments;
-exports.useCssPalette = useCssPalette;
-exports.useDeleteComment = useDeleteComment;
-exports.useReaction = useReaction;
-exports.useReactions = useReactions;
-exports.useRemoveReaction = useRemoveReaction;
-exports.useSearchUsers = useSearchUsers$1;
-exports.useUncontrolledState = useUncontrolledState;
-exports.useUpdateComment = useUpdateComment;
-exports.useUser = useUser;
-//# sourceMappingURL=index.js.map
+export { Auth, AuthModal, Avatar, Comment, CommentReaction, CommentReactions, Comments, CommentsProvider, Reaction, ReactionSelector, User, useAddComment, useAddReaction, useComment, useCommentReactions, useComments, useCssPalette, useDeleteComment, useReaction, useReactions, useRemoveReaction, useSearchUsers$1 as useSearchUsers, useUncontrolledState, useUpdateComment, useUser };
+//# sourceMappingURL=index.esm.js.map
