@@ -5,7 +5,7 @@ bun.lockb
 build
 dist
 out
-
+global.css
 # misc
 eslintcache
 .cache
