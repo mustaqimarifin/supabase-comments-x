@@ -1,7 +1,7 @@
 {
   "name": "supabase-comments-x",
   "type"       : "module"                                      ,
-  "version"    : "0.1.0"                                       ,
+  "version": "0.1.2",
   "description": "Comments powered by React Query and Supabase",
   "author": "Mustaqim Arifin <mustaqim.arifin@gmail.com>",
   "license": "MIT",
@@ -84,7 +84,7 @@
     "eslint-plugin-react-refresh": "^0.4.9",
     "pg": "^8.12.0",
     "rimraf": "^6.0.1",
-    "supalazy": "0.0.1",
+    "supalazy": "1.0.0",
     "tslib": "^2.6.3",
     "typescript": "^5.5.4"
   },
