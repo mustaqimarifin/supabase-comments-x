@@ -1,5 +1,4 @@
 /* eslint-disable no-alert */
-import { BoldIcon, CodeIcon, ImagePlusIcon, ItalicIcon } from 'lucide-react'
 import { forwardRef, useCallback, useImperativeHandle } from 'react'
 import { EditorContent, useEditor } from '@tiptap/react'
 import type { Editor as IEditor } from '@tiptap/react'
@@ -9,6 +8,7 @@ import Link from '@tiptap/extension-link'
 import { cx } from '../utils.js'
 import MentionsExtension from './Mentions.js'
 import { useCommentsContext } from './CommentsProvider.js'
+import { BoldIcon, CodeIcon, ImageIcon, ItalicIcon } from '../Icons.js'
 
 export interface EditorProps {
   defaultValue: string
@@ -83,8 +83,7 @@ const Editor = forwardRef(
                 editor?.chain().focus().toggleBold().run()
                 e.preventDefault()
               }}
-              title="Bold"
-            >
+              title="Bold">
               <BoldIcon
                 className={cx('h-6 w-6 p-1.5 font-bold rounded-full', editor?.isActive('bold') && activeStyles)}
               />
@@ -95,8 +94,7 @@ const Editor = forwardRef(
                 editor?.chain().focus().toggleItalic().run()
                 e.preventDefault()
               }}
-              title="Italic"
-            >
+              title="Italic">
               <ItalicIcon
                 className={cx('h-6 w-6 p-1.5 font-bold rounded-full', editor?.isActive('italic') && activeStyles)}
               />
@@ -104,9 +102,8 @@ const Editor = forwardRef(
             <div
               className="grid w-8 h-full place-items-center cursor-pointer"
               onMouseDown={addImage}
-              title="Upload Image"
-            >
-              <ImagePlusIcon
+              title="Upload Image">
+              <ImageIcon
                 className={cx('h-6 w-6 p-1.5 font-bold rounded-full', editor?.isActive('image') && activeStyles)}
               />
             </div>
@@ -116,8 +113,7 @@ const Editor = forwardRef(
                 editor?.chain().focus().toggleCodeBlock().run()
                 e.preventDefault()
               }}
-              title="Code Block"
-            >
+              title="Code Block">
               <CodeIcon
                 className={cx('h-6 w-6 p-1.5 font-bold rounded-full', editor?.isActive('codeBlock') && activeStyles)}
               />
@@ -128,7 +124,7 @@ const Editor = forwardRef(
         )}
       </div>
     )
-  },
+  }
 )
 
 export default Editor

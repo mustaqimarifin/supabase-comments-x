@@ -10,6 +10,7 @@
 - Now on Tanstack/@tanstack/react-query
 - Removed all Date-related packages. Using native JS.
 - Removed `color` for `tinycolor2`
+- Auth is fully social. Its just easier to maintain. If theres any demand for email auth, leave me a message.
 
 **Size**
 
@@ -18,11 +19,6 @@
 **REACT 18**
 
 - All dependencies have been updated
-
-**FIXES**
-
-- useLayoutEffect to isomorphicEffect to silence console warnings
-- Addressed duplicate 'CodeBlock' issue with @tiptap editor
 
 _and_
 
@@ -44,7 +40,7 @@ First things first, this project is powered by [supabase](https://supabase.com/)
 Install this package and its peer dependencies
 
 ```bash
-npm install --save supabase-comments-x @supabase/ssr @supabase/supabase-js @tanstack/react-query
+bun i supabase-comments-x @supabase/ssr @supabase/supabase-js @tanstack/react-query
 ```
 
 ### Running Migrations
@@ -52,7 +48,7 @@ npm install --save supabase-comments-x @supabase/ssr @supabase/supabase-js @tans
 Once you've got yourself a supabase db, you'll need to add a few tables and other sql goodies to it with the following command
 
 ```bash
-npx supabase-comments-x run-migrations <supabase-connection-string>
+bunx supabase-comments-x run-migrations <supabase-connection-string>
 ```
 
 You can find your connection string on the supabase dashboard: https://app.supabase.io/project/PUT-YOUR-PROJECT-ID-HERE/settings/database
@@ -63,7 +59,7 @@ It should look something like this: `postgresql://postgres:some-made-up-password
 
 Then in your app code you can add comments with the following
 
-```jsx utils/supabase/client
+```tsx utils/supabase/client
 import { createBrowserClient } from '@supabase/ssr'
 
 export function createClient() {
@@ -72,6 +68,7 @@ export function createClient() {
 ```
 
 ```jsx
+import 'supabase-comments-x/styles'
 import { useState } from 'react'
 import {
   AuthModal,
@@ -102,6 +99,41 @@ function CommentSection({ slug }: { slug: string }) {
 }
 ```
 
+### Next.JS
+
+If you're using Next.JS, for best performance take advantage of `next/dynamic`.
+
+```tsx
+'use client'
+import 'supabase-comments-x/styles'
+import { useState } from 'react'
+
+import lazy from 'next/dynamic'
+const CommentsProvider = lazy(() => import('supabase-comments-x/commentsprovider'), { ssr: false })
+const AuthModal = lazy(() => import('supabase-comments-x/authmodal'), { ssr: false })
+const Comments = lazy(() => import('scx-tan-2').then((m) => m.Comments), { ssr: false })
+import { createClient } from '@/utils/supabase/client'
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+
+function CommentSection({ slug }: { slug: string }) {
+  return (
+    <CommentsProvider
+      supabaseClient={supabase}
+      onAuthRequested={() => setModalVisible(true)}
+    >
+      <AuthModal
+        visible={modalVisible}
+        onAuthenticate={() => setModalVisible(false)}
+        onClose={() => setModalVisible(false)}
+        providers={['google', 'facebook']}
+      />
+      <Comments topic={slug} />
+    </CommentsProvider>
+  )
+}
+```
+
 Note that [supabase supports social auth with dozens of providers out-of-the-box](https://supabase.com/docs/guides/auth#authentication) so you can sign in with Google, Facebook, Twitter, Github and many more.
 
 supabase-comments-x exports two auth components, `Auth` and `AuthModal`. The `Auth` component is a small adaptation of [@supabase/ui's Auth component](https://ui.supabase.io/components/auth) and supports all of the same props. `AuthModal` also supports all of the same props as the `Auth` component along with [a few additional props](https://github.com/mustaqimarifin/supabase-comments-x/edit/main/README.md#api).
@@ -109,8 +141,9 @@ supabase-comments-x exports two auth components, `Auth` and `AuthModal`. The `Au
 Lastly, if you want to write your own authentication ui, then know that the supbase client provides a method `supabase.auth.signIn` which can authenticate the supabase client without forcing any ui on you.
 
 ```tsx
+'use client'
+import 'supabase-comments-x/styles'
 import { createClient } from '@/utils/supabase/client'
-
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
 // Social Auth
@@ -125,13 +158,13 @@ const { user, error } = await supabase.auth.signInWithPassword({
 })
 ```
 
-### Usage Without Auth/Next.JS
+### Usage Without Auth
 
-If you already have an app set up with supabase authentication or utilizing any server-side features (Next.JS)
-then you can skip the `AuthModal` and direct the user to your
+If you already have an app set up with supabase authentication then you can skip the `AuthModal` and direct the user to your
 existing sign-in system.
 
 ```jsx
+import 'supabase-comments-x/styles'
 import { useState } from 'react'
 import { Comments, CommentsProvider } from 'supabase-comments-x'
 import { createClient } from '@/utils/supabase/client'
@@ -196,6 +229,7 @@ If you want to customize the way comment reactions are rendered then you're in l
 You can pass your own `CommentReactions` component to control exactly how reactions are rendered beneath each comment.
 
 ```tsx
+import 'supabase-comments-x/styles'
 import { useState } from 'react'
 import { Button } from '@supabase/ui'
 import {

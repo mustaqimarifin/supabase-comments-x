@@ -1,5 +1,4 @@
 import { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react'
-import { AlertCircle, Cat, EllipsisVertical as Dots, Plus } from 'lucide-react'
 
 // import crm from './CommentReactions.module.css'
 // import rt from './Reaction.module.css'
@@ -26,6 +25,7 @@ import type * as api from '../api.js'
 import { useAuthUtils, useCommentsContext } from './CommentsProvider.js'
 import type { EditorRefHandle } from './Editor.js'
 import Editor from './Editor.js'
+import { AlertTriangle, Cat, Dots, Plus } from '../Icons.js'
 
 export interface AvatarProps extends Omit<React.HTMLProps<HTMLDivElement>, 'size'> {
   src: string
@@ -444,7 +444,7 @@ function Comments({ topic, parent_id }: CommentsProps) {
           <div className="grid p-4 place-items-center">
             <div className="flex flex-col items-center space-y-0.5 text-center">
               <Typography.Text>
-                <AlertCircle />
+                <AlertTriangle />
               </Typography.Text>
               <Typography.Text>Unable to load comments.</Typography.Text>
             </div>
