@@ -12,3 +12,4 @@ export interface EditorRefHandle {
 }
 declare const Editor: import("react").ForwardRefExoticComponent<Omit<EditorProps, "ref"> & import("react").RefAttributes<unknown>>;
 export default Editor;
+//# sourceMappingURL=Editor.d.ts.map

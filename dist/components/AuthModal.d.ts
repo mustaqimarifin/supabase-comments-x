@@ -11,3 +11,4 @@ export interface AuthModalProps extends Omit<ComponentProps<typeof Auth>, 'supab
 }
 declare function AuthModal({ visible, onAuthenticate, onClose, title, description, className, ...otherProps }: AuthModalProps): import("react/jsx-runtime").JSX.Element;
 export default AuthModal;
+//# sourceMappingURL=AuthModal.d.ts.map

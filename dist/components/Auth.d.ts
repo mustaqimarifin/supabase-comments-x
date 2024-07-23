@@ -42,3 +42,4 @@ declare namespace Auth {
     var useUser: typeof useUserCTX;
 }
 export default Auth;
+//# sourceMappingURL=Auth.d.ts.map

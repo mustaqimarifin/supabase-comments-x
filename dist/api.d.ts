@@ -80,3 +80,4 @@ export declare function createApiClient(supabase: SupabaseClient): {
     searchUsers: (search: string) => Promise<DisplayUser[]>;
     getUser: (id: string) => Promise<DisplayUser>;
 };
+//# sourceMappingURL=api.d.ts.map

@@ -22,3 +22,4 @@ export declare function useUncontrolledState<T>(options: UseUncontrolledStateOpt
     key: number;
 };
 export declare function useCssPalette(baseColor: string, variablePrefix: string): void;
+//# sourceMappingURL=utils.d.ts.map
