@@ -8,7 +8,6 @@
     "declaration": true,
     "importHelpers": true,
     "declarationDir": "dist",
-    "declarationMap": true,
     "moduleResolution": "NodeNext",
     "noUnusedLocals": false,
     "noUnusedParameters": false,

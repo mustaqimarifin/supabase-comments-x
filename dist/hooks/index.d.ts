@@ -48,4 +48,3 @@ interface UseSearchUsersQuery {
 }
 declare function useSearchUsers({ search }: UseSearchUsersQuery, options?: Options): import("@tanstack/react-query").UseQueryResult<import("../api.js").DisplayUser[], Error>;
 export { useComment, useComments, useSearchUsers, useUser, useReaction, useReactions, useCommentReactions, useAddComment, useAddReaction, useDeleteComment, useRemoveReaction, useUpdateComment, };
-//# sourceMappingURL=index.d.ts.map

@@ -1,6 +1,6 @@
 {
   "name": "supabase-comments-x",
-  "type": "module", "version": "0.1.4",
+  "type": "module", "version": "0.1.5",
   "description": "Comments powered by React Query and Supabase",
   "author": "Mustaqim Arifin <mustaqim.arifin@gmail.com>",
   "license": "MIT",
@@ -38,18 +38,17 @@
     "clean"     : "rimraf dist/"                                       ,
     "copy-files": "copyfiles -u 1 lib/**/*.css dist/"                  ,
     "build"     : "bun clean && tsc && bun copy-files"                 ,
+    "build:v": "vite build",
     "lint"      : "eslint . --fix --cache --cache-location eslintcache",
     "format"    : "bun prettier --write . --ignore-path .gitignore"    ,
-    "fix"       : "bun format && bun lint"                             ,
+    "fix": "bun format && bun lint",
     "ci:version": "changeset version",
     "ci:release": "changeset publish"
   },
   "peerDependencies": {
     "@supabase/supabase-js": "^2.44.4",
     "@tanstack/react-query": "^5.51.11",
-    "postcss"    : "8.4.39" ,
-    "react"      : "^18.3.1",
-    "react-dom"  : "^18.3.1",
+    "postcss": "8.4.39", "react": "^18.3.1", "react-dom": "^18.3.1",
     "tailwindcss": "3.4.6"
   },
   "dependencies": {
@@ -64,7 +63,7 @@
     "@types/traverse"          : "^0.6.37",
     "tinycolor2"               : "1.6.0",
     "tippy.js": "^6.3.7",
-    "traverse": "^0.6.9", "supalazy": "^1.0.2"
+    "traverse": "^0.6.9", "supalazy": "^1.0.5"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.23.2",
@@ -81,10 +80,15 @@
     "eslint-plugin-format": "^0.1.2",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.9",
+    "lightningcss": "^1.25.1",
     "pg": "^8.12.0",
     "rimraf": "^6.0.1",
     "tslib": "^2.6.3",
-    "typescript": "^5.5.4"
+    "typescript"                      : "^5.5.4"       ,
+    "vite"                            : "^5.3.4"       ,
+    "vite-plugin-dts"                 : "^4.0.0-beta.1",
+    "vite-plugin-lib-inject-css"      : "^2.1.1"       ,
+    "vite-plugin-optimize-css-modules": "^1.1.0"
   },
   "release"      : { "branches": ["main"]                     },
   "publishConfig": {                       "access": "public" }

@@ -35,4 +35,3 @@ export interface CommentsProviderProps {
 }
 declare function CommentsProvider({ queryClient, supabaseClient, children, onAuthRequested, onUserClick, mode, accentColor, onError, components, enableMentions, }: CommentsProviderProps): import("react/jsx-runtime").JSX.Element;
 export default CommentsProvider;
-//# sourceMappingURL=CommentsProvider.d.ts.map
