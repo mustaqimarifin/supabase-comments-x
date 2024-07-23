@@ -1,2 +1,14 @@
-node_modules
 src
+lib
+build
+dist
+out
+eslintcache
+.editorconfig
+.eslintrc.json
+.gitignore
+.travis.yml
+rollup.config.dev.js
+rollup.config.js
+yarn-error.log
+node_modules

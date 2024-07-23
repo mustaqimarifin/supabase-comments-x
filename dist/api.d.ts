@@ -1,45 +1,37 @@
-import { SupabaseClient } from '@supabase/supabase-js';
-export interface CommentReactionMetadata {
-    comment_id: string;
-    reaction_type: string;
+import type { SupabaseClient } from '@supabase/supabase-js';
+export type CommentReactionMetadata = {
+    comment_id: number;
+    type: string;
     reaction_count: number;
     active_for_user: boolean;
-}
-export interface DisplayUser {
+};
+export type DisplayUser = {
     id: string;
     name: string;
     avatar: string;
-}
-export interface Comment {
-    id: string;
+};
+export type Comment = {
+    id: number;
     user_id: string;
-    parent_id: string | null;
+    parent_id?: number;
     topic: string;
-    comment: string;
+    body: string;
     created_at: string;
     replies_count: number;
     reactions_metadata: CommentReactionMetadata[];
-    user: DisplayUser;
-    mentioned_user_ids: string[];
-}
-export interface Reaction {
+    author: DisplayUser;
+    mentions?: string[];
+};
+export type Reaction = {
     type: string;
     created_at: string;
     label: string;
     url: string;
     metadata: any;
-}
-export interface CommentReaction {
-    id: string;
-    user_id: string;
-    comment_id: string;
-    reaction_type: string;
-    created_at: string;
-    user: DisplayUser;
-}
-export declare const assertResponseOk: (response: {
+};
+export declare function assertResponseOk(response: {
     error: any;
-}) => void;
+}): void;
 export declare class ApiError extends Error {
     type: string;
     message: string;
@@ -48,43 +40,43 @@ export declare class ApiError extends Error {
     code?: string;
     constructor(error: any);
 }
-export interface GetCommentsOptions {
+export type GetCommentsOptions = {
     topic: string;
-    parentId: string | null;
-}
-export interface AddCommentPayload {
-    comment: string;
+    parent_id?: number;
+};
+export type AddCommentPayload = {
+    body: string;
     topic: string;
-    parent_id: string | null;
-    mentioned_user_ids: string[];
-}
-export interface UpdateCommentPayload {
-    comment: string;
-    mentioned_user_ids: string[];
-}
-export interface GetCommentReactionsOptions {
-    reaction_type: string;
-    comment_id: string;
-}
-export interface AddCommentReactionPayload {
-    reaction_type: string;
-    comment_id: string;
-}
-export interface RemoveCommentReactionPayload {
-    reaction_type: string;
-    comment_id: string;
-}
-export declare const createApiClient: (supabase: SupabaseClient) => {
-    getComments: ({ topic, parentId, }: GetCommentsOptions) => Promise<Comment[]>;
-    getComment: (id: string) => Promise<Comment>;
+    parent_id?: number;
+    mentions?: string[];
+};
+export type UpdateCommentPayload = {
+    body: string;
+    mentions?: string[];
+};
+export type CommentReaction = {
+    id: number;
+    user_id: string;
+    comment_id: number;
+    type: string;
+    created_at: string;
+    author: DisplayUser;
+};
+export type CommentReactionPayload = {
+    type: string;
+    comment_id: number;
+};
+export declare function createApiClient(supabase: SupabaseClient): {
+    getComments: ({ topic, parent_id }: GetCommentsOptions) => Promise<Comment[]>;
+    getComment: (id: number) => Promise<Comment>;
     addComment: (payload: AddCommentPayload) => Promise<Comment>;
-    updateComment: (id: string, payload: UpdateCommentPayload) => Promise<Comment>;
-    deleteComment: (id: string) => Promise<Comment>;
+    updateComment: (id: number, payload: UpdateCommentPayload) => Promise<Comment>;
+    deleteComment: (id: number) => Promise<Comment>;
     getReactions: () => Promise<Reaction[]>;
     getReaction: (type: string) => Promise<Reaction>;
-    getCommentReactions: ({ reaction_type, comment_id, }: GetCommentReactionsOptions) => Promise<CommentReaction[]>;
-    addCommentReaction: (payload: AddCommentReactionPayload) => Promise<CommentReaction>;
-    removeCommentReaction: ({ reaction_type, comment_id, }: RemoveCommentReactionPayload) => Promise<CommentReaction>;
+    getCommentReactions: ({ type, comment_id }: CommentReactionPayload) => Promise<CommentReaction[]>;
+    addCommentReaction: (payload: CommentReactionPayload) => Promise<CommentReaction>;
+    removeCommentReaction: ({ type, comment_id }: CommentReactionPayload) => Promise<CommentReaction>;
     searchUsers: (search: string) => Promise<DisplayUser[]>;
     getUser: (id: string) => Promise<DisplayUser>;
 };

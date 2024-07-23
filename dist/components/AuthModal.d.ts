@@ -1,12 +1,13 @@
-import { ComponentProps, FC } from 'react';
-import Auth from './Auth';
-import { Session } from '@supabase/gotrue-js';
+import { type ComponentProps } from 'react';
+import type { Session } from '@supabase/supabase-js';
+import Auth from './Auth.js';
 export interface AuthModalProps extends Omit<ComponentProps<typeof Auth>, 'supabaseClient'> {
     visible: boolean;
-    onClose?: () => void;
+    onClose: () => void;
     onAuthenticate?: (session: Session) => void;
     title?: string;
     description?: string;
+    className?: string;
 }
-declare const AuthModal: FC<AuthModalProps>;
+declare function AuthModal({ visible, onAuthenticate, onClose, title, description, className, ...otherProps }: AuthModalProps): import("react/jsx-runtime").JSX.Element;
 export default AuthModal;

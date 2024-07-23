@@ -1,9 +1,24 @@
+import type { Provider, Session, SupabaseClient, User } from '@supabase/supabase-js';
 import React from 'react';
-import { SupabaseClient, Provider } from '@supabase/supabase-js';
-declare type ViewType = 'sign_in' | 'sign_up' | 'forgotten_password' | 'magic_link' | 'update_password';
-declare type RedirectTo = undefined | string;
-export interface AuthProps {
+export interface AuthSession {
+    user: User | null;
+    session: Session | null;
+}
+interface Props {
     supabaseClient: SupabaseClient;
+    [propName: string]: any;
+}
+export declare function UserContextProvider(props: Props): import("react/jsx-runtime").JSX.Element;
+export declare function useUserCTX(): AuthSession;
+export interface IconsProps {
+    provider: string;
+}
+type RedirectTo = undefined | string;
+declare type ProviderScopes = {
+    [key in Partial<Provider>]: string;
+};
+export interface AuthProps {
+    supabaseClient: SupabaseClient<any, any, any>;
     className?: string;
     children?: React.ReactNode;
     style?: React.CSSProperties;
@@ -11,28 +26,19 @@ export interface AuthProps {
     socialColors?: boolean;
     socialButtonSize?: 'tiny' | 'small' | 'medium' | 'large' | 'xlarge';
     providers?: Provider[];
+    view?: 'sign_in' | 'sign_up' | 'magic_link';
+    providerScopes?: Partial<ProviderScopes>;
+    queryParams?: {
+        [key: string]: string;
+    };
     verticalSocialLayout?: any;
-    view?: ViewType;
     redirectTo?: RedirectTo;
     onlyThirdPartyProviders?: boolean;
     magicLink?: boolean;
 }
-declare function Auth({ supabaseClient, className, style, socialLayout, socialColors, socialButtonSize, providers, view, redirectTo, onlyThirdPartyProviders, magicLink, }: AuthProps): JSX.Element | null;
+declare function Auth({ supabaseClient, className, style, socialLayout, socialColors, socialButtonSize, providers, redirectTo, onlyThirdPartyProviders, magicLink, ...props }: AuthProps): import("react/jsx-runtime").JSX.Element;
 declare namespace Auth {
-    var ForgottenPassword: ({ setAuthView, supabaseClient, redirectTo, }: {
-        setAuthView: any;
-        supabaseClient: SupabaseClient;
-        redirectTo?: string | undefined;
-    }) => JSX.Element;
-    var UpdatePassword: ({ supabaseClient, }: {
-        supabaseClient: SupabaseClient;
-    }) => JSX.Element;
-    var MagicLink: ({ setAuthView, supabaseClient, redirectTo, }: {
-        setAuthView: any;
-        supabaseClient: SupabaseClient;
-        redirectTo?: string | undefined;
-    }) => JSX.Element;
-    var UserContextProvider: (props: import("@supabase/ui/dist/cjs/components/Auth/UserContext").Props) => JSX.Element;
-    var useUser: () => import("@supabase/ui/dist/cjs/components/Auth/UserContext").AuthSession;
+    var UserContextProvider: typeof import("./Auth.js").UserContextProvider;
+    var useUser: typeof useUserCTX;
 }
 export default Auth;

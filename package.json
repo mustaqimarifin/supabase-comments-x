@@ -1,108 +1,99 @@
 {
   "name": "supabase-comments-x",
+  "type"       : "module"                                      ,
+  "version"    : "0.1.0"                                       ,
+  "description": "Comments powered by React Query and Supabase",
   "author": "Mustaqim Arifin <mustaqim.arifin@gmail.com>",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mustaqimarifin/supabase-comments-x.git"
   },
-  "keywords": [
-    "postgres",
-    "comments",
-    "supabase",
-    "react-query"
-  ],
-  "version": "0.0.1",
-  "description": "Comments powered by React Query and Supabase",
+  "keywords": ["postgres", "comments", "supabase", "tanstack", "react-query"],
+  "exports": {
+    ".": { "types": "./dist/index.d.ts", "default": "./dist/index.js" },
+    "./comments": {
+      "types": "./dist/components/CommentSection.d.ts",
+      "default": "./dist/components/CommentSection.js"
+    },
+    "./commentsprovider": {
+      "types": "./dist/components/CommentsProvider.d.ts",
+      "default": "./dist/components/CommentsProvider.js"
+    },
+    "./authmodal": {
+      "types": "./dist/components/AuthModal.d.ts",
+      "default": "./dist/components/AuthModal.js"
+    },
+    "./style1": { "default": "./dist/index.css" },
+    "./style2": { "default": "./dist/style.css" },
+    "./dist/*": "./dist/*"
+  },
   "main": "dist/index.js",
-  "module": "dist/index.esm.js",
-  "bin": {
-    "supabase-comments-x": "bin/script.js"
-  },
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
+  "typesVersions": {
+    "*": { "*": ["./dist/*", "./dist/index.d.ts"] }
+  },
+  "bin": {"supabase-comments-x": "bin/script.js"},
+  "files": ["bin", "dist"],
   "scripts": {
-    "start": "NODE_ENV=production rollup -c -w",
-    "build": "NODE_ENV=production rollup -c",
-    "prepare": "NODE_ENV=production rollup -c"
+    "clean"     : "rimraf dist/"                                       ,
+    "copy-files": "copyfiles -u 1 lib/**/*.css dist/"                  ,
+    "build"     : "bun clean && tsc && bun copy-files"                 ,
+    "lint"      : "eslint . --fix --cache --cache-location eslintcache",
+    "format"    : "bun prettier --write . --ignore-path .gitignore"    ,
+    "fix"       : "bun format && bun lint"                             ,
+    "ci:version": "changeset version"                                  ,
+    "ci:release": "changeset publish"
   },
-  "license": "MIT",
   "peerDependencies": {
-    "@supabase/supabase-js": "1.35.7",
-    "@supabase/ui": ">0.30.0",
-    "dayjs": ">1.0.0",
-    "react": ">17.0.0",
-    "react-dom": ">17.0.0",
-    "react-query": ">3.0.0"
-  },
-  "devDependencies": {
-    "@rollup/plugin-commonjs": "^20.0.0",
-    "@rollup/plugin-json": "^4.1.0",
-    "@rollup/plugin-node-resolve": "^13.0.4",
-    "@supabase/react-data-grid": "7.1.0-beta.1",
-    "@supabase/ui": "^0.36.3",
-    "@tailwindcss/forms": "^0.3.3",
-    "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/react": "^12.0.0",
-    "@types/color": "^3.0.2",
-    "@types/file-saver": "^2.0.2",
-    "@types/jest": "^27.0.1",
-    "@types/md5": "^2.3.1",
-    "@types/react": "^17.0.20",
-    "@types/react-beautiful-dnd": "^13.0.0",
-    "@types/react-dom": "^17.0.9",
-    "@types/traverse": "^0.6.32",
-    "autoprefixer": "^10.3.4",
-    "cssnano": "^5.0.8",
-    "identity-obj-proxy": "^3.0.0",
-    "jest": "^26.6.3",
-    "react": "*",
-    "react-dom": "*",
-    "rollup": "^2.56.3",
-    "rollup-plugin-copy": "^3.4.0",
-    "rollup-plugin-node-polyfills": "^0.2.1",
-    "rollup-plugin-peer-deps-external": "^2.2.4",
-    "rollup-plugin-postcss": "^4.0.1",
-    "rollup-plugin-typescript2": "0.34.1",
-    "tailwindcss": "^3.0.14",
-    "ts-jest": "^26.5.6",
-    "tslib": "^2.4.1",
-    "typescript": "^4.4.2"
+    "@supabase/supabase-js": "^2.44.4" ,
+    "@tanstack/react-query": "^5.51.11",
+    "lucide-react"         : "^0.414.0",
+    "postcss"              : "8.4.39"  ,
+    "react"                : "^18.3.1" ,
+    "react-dom"            : "^18.3.1" ,
+    "tailwindcss"          : "3.4.6"
   },
   "dependencies": {
-    "@tiptap/extension-code-block-lowlight": "^2.0.0-beta.68",
-    "@tiptap/extension-link": "^2.0.0-beta.36",
-    "@tiptap/extension-mention": "^2.0.0-beta.92",
-    "@tiptap/extension-placeholder": "^2.0.0-beta.47",
-    "@tiptap/html": "^2.0.0-beta.162",
-    "@tiptap/react": "^2.0.0-beta.105",
-    "@tiptap/starter-kit": "^2.0.0-beta.171",
-    "clsx": "^1.1.1",
-    "color": "^4.2.0",
-    "commander": "^8.3.0",
-    "javascript-time-ago": "^2.3.10",
-    "lowlight": "^2.4.0",
-    "md5": "^2.3.0",
-    "pg": "^8.7.1",
-    "react-image": "^4.0.3",
-    "react-time-ago": "^7.1.7",
+    "@formkit/auto-animate"    : "^0.8.2" ,
+    "@tiptap/extension-image"  : "^2.5.5" ,
+    "@tiptap/extension-link"   : "2.5.5"  ,
+    "@tiptap/extension-mention": "^2.5.5" ,
+    "@tiptap/pm"               : "^2.5.5" ,
+    "@tiptap/react"            : "2.5.5"  ,
+    "@tiptap/starter-kit"      : "2.5.5"  ,
+    "@tiptap/suggestion"       : "2.5.5"  ,
+    "@types/traverse"          : "^0.6.37",
+    "tinycolor2"               : "1.6.0",
     "tippy.js": "^6.3.7",
-    "traverse": "^0.6.6"
+    "traverse": "^0.6.9"
   },
-  "prettier": {
-    "printWidth": 80,
-    "semi": true,
-    "singleQuote": true,
-    "trailingComma": "es5"
+  "devDependencies": {
+    "@antfu/eslint-config": "^2.23.2",
+    "@changesets/cli": "^2.27.7",
+    "@eslint-react/eslint-plugin": "^1.5.30",
+    "@types/node": "^20.14.11",
+    "@types/pg": "^8.11.6",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@types/tinycolor2": "^1.4.6",
+    "autoprefixer": "^10.4.19",
+    "commander": "^12.1.0",
+    "copyfiles": "^2.4.1",
+    "eslint": "9.7.0",
+    "eslint-plugin-format": "^0.1.2",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.9",
+    "pg": "^8.12.0",
+    "prettier": "^3.3.3",
+    "prettier-plugin-sort-imports": "^1.8.6",
+    "rimraf": "^6.0.1",
+    "supalazy": "0.0.1",
+    "tslib": "^2.6.3",
+    "typescript": "^5.5.4"
   },
-  "files": [
-    "dist",
-    "bin"
-  ],
-  "release": {
-    "branches": [
-      "main"
-    ]
-  },
-  "publishConfig": {
-    "access": "public"
-  }
+  "release"      : { "branches": ["main"]                     },
+  "publishConfig": {                       "access": "public" }
+
 }

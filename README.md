@@ -1,40 +1,39 @@
 # Supabase Comments X
 
-> Just a fork of the excellent [Supabase-Comments-Extension](https://malerba118.github.io/supabase-comments-extension/) by [ Austin Malerba](https://github.com/malerba118). Give the project a like!
-
+> Just a fork of the excellent [Supabase-Comments-Extension](https://malerba118.github.io/supabase-comments-extension/) by [Austin Malerba](https://github.com/malerba118). Give the project a like!
 
 ## Whats different?
-**DB**
-- Added UUIDv7() and UUIDv8() generators compatible with native `uuid` type in postgres. Code courtesy of [Kyle Hubert's gist](https://gist.github.com/kjmph/5bd772b2c2df145aa645b837da7eca74)
 
-**AUTH**
-- Auth redirects to origin
-- `@Twitter` handles for Twitter Auth
+**BREAKING CHANGES**
 
-**TIME**
-- Switched to Dayjs
+- Fully ESM.
+- Now on Tanstack/@tanstack/react-query
+- Removed all Date-related packages. Using native JS.
+- Removed `color` for `tinycolor2`
+
+**Size**
+
+- Biggest change by far. Over 50% in reduction in overall project size, much of it due to the deprecated @supabase/ui library which re-exported almost all of Feather icons. So that was scrapped and replaced with Lucide React which already tree-shakes any unused icons.
+
+**REACT 18**
+
+- All dependencies have been updated
 
 **FIXES**
+
 - useLayoutEffect to isomorphicEffect to silence console warnings
 - Addressed duplicate 'CodeBlock' issue with @tiptap editor
 
 _and_
+
 - Personalized stickers 👺
 
------
-
-
+---
 
 Add a robust comment system to your react app in ~10 minutes!
 
 This library provides comments, replies, reactions, mentions, and authentication all out of the box.
 
-## Demos
-
-<!-- Choose your flavor: -->
-
-- https://malerba118.github.io/supabase-comments-extension
-- https://codesandbox.io/s/supabase-comments-extension-demo-8hg9s?file=/src/App.tsx
 
 ## Getting Started
 
@@ -45,7 +44,7 @@ First things first, this project is powered by [supabase](https://supabase.com/)
 Install this package and its peer dependencies
 
 ```bash
-npm install --save supabase-comments-x @supabase/ui @supabase/supabase-js react-query
+npm install --save supabase-comments-x @supabase/ssr @supabase/supabase-js @tanstack/react-query
 ```
 
 ### Running Migrations
@@ -64,19 +63,27 @@ It should look something like this: `postgresql://postgres:some-made-up-password
 
 Then in your app code you can add comments with the following
 
+```jsx utils/supabase/client
+import { createBrowserClient } from '@supabase/ssr'
+
+export function createClient() {
+  return createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
+}
+```
+
 ```jsx
-import { useState } from 'react';
-import { createClient } from '@supabase/supabase-js';
+import { useState } from 'react'
 import {
-  Comments,
   AuthModal,
+  Comments,
   CommentsProvider,
-} from 'supabase-comments-x';
+} from 'supabase-comments-x'
+import { createClient } from '@/utils/supabase/client'
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
-const App = () => {
-  const [modalVisible, setModalVisible] = useState(false);
+function CommentSection({ slug }: { slug: string }) {
+  const [modalVisible, setModalVisible] = useState(false)
 
   return (
     <CommentsProvider
@@ -89,10 +96,10 @@ const App = () => {
         onClose={() => setModalVisible(false)}
         providers={['google', 'facebook']}
       />
-      <Comments topic="tutorial-one" />
+      <Comments topic={slug} />
     </CommentsProvider>
-  );
-};
+  )
+}
 ```
 
 Note that [supabase supports social auth with dozens of providers out-of-the-box](https://supabase.com/docs/guides/auth#authentication) so you can sign in with Google, Facebook, Twitter, Github and many more.
@@ -102,47 +109,47 @@ supabase-comments-x exports two auth components, `Auth` and `AuthModal`. The `Au
 Lastly, if you want to write your own authentication ui, then know that the supbase client provides a method `supabase.auth.signIn` which can authenticate the supabase client without forcing any ui on you.
 
 ```tsx
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from '@/utils/supabase/client'
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
 // Social Auth
-const { user, error } = await supabase.auth.signIn({
+const { user, error } = await supabase.auth.signInWithOAuth({
   provider: 'facebook',
-});
+})
 
 // Email/Password Auth
-const { user, error } = await supabase.auth.signIn({
+const { user, error } = await supabase.auth.signInWithPassword({
   email: 'example@email.com',
   password: 'example-password',
-});
+})
 ```
 
-### Usage Without Auth
+### Usage Without Auth/Next.JS
 
-If you already have an app set up with supabase authentication,
+If you already have an app set up with supabase authentication or utilizing any server-side features (Next.JS)
 then you can skip the `AuthModal` and direct the user to your
 existing sign-in system.
 
 ```jsx
-import { useState } from 'react';
-import { createClient } from '@supabase/supabase-js';
-import { Comments, CommentsProvider } from 'supabase-comments-x';
+import { useState } from 'react'
+import { Comments, CommentsProvider } from 'supabase-comments-x'
+import { createClient } from '@/utils/supabase/client'
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
-const App = () => {
+function App() {
   return (
     <CommentsProvider
       supabaseClient={supabase}
       onAuthRequested={() => {
-        window.location.href = '/sign-in';
+        window.location.href = '/sign-in'
       }}
     >
       <Comments topic="tutorial-one" />
     </CommentsProvider>
-  );
-};
+  )
+}
 ```
 
 ## Advanced Features
@@ -158,9 +165,29 @@ You can add your own reactions by adding rows to the `reactions` table.
 It's easy to add rows via the supabase dashboard or if you prefer you can write some sql to insert new rows.
 
 ```sql
-insert into reactions(type, label, url) values ('heart', 'Heart', 'https://emojis.slackmojis.com/emojis/images/1596061862/9845/meow_heart.png?1596061862');
-insert into reactions(type, label, url) values ('like', 'Like', 'https://emojis.slackmojis.com/emojis/images/1588108689/8789/fb-like.png?1588108689');
-insert into reactions(type, label, url) values ('party-blob', 'Party Blob', 'https://emojis.slackmojis.com/emojis/images/1547582922/5197/party_blob.gif?1547582922');
+INSERT into
+    reactions (type, label, url)
+values (
+        'heart',
+        'Bulma',
+        'https://i.postimg.cc/8zHSsSRD/bulma.webp'
+    );
+
+INSERT into
+    reactions (type, label, url)
+values (
+        'like',
+        'Like',
+        'https://i.postimg.cc/PqVnzQVR/nofucks.webp'
+    );
+
+INSERT into
+    reactions (type, label, url)
+values (
+        'suss-cat',
+        'Suss Cat',
+        'https://i.postimg.cc/sXBdnGtD/suss.webp'
+    );
 ```
 
 ### Custom Reaction Rendering
@@ -169,29 +196,29 @@ If you want to customize the way comment reactions are rendered then you're in l
 You can pass your own `CommentReactions` component to control exactly how reactions are rendered beneath each comment.
 
 ```tsx
-import { useState } from 'react';
-import { createClient } from '@supabase/supabase-js';
-import { Button } from '@supabase/ui';
+import { useState } from 'react'
+import { Button } from '@supabase/ui'
 import {
+  CommentReactionsProps,
   Comments,
   CommentsProvider,
-  CommentReactionsProps,
-} from 'supabase-comments-x';
+} from 'supabase-comments-x'
+import { createClient } from '@/utils/supabase/client'
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
-const CustomCommentReactions: FC<CommentReactionsProps> = ({
+function CustomCommentReactions({
   activeReactions,
   toggleReaction,
-}) => {
+}) {
   return (
     <Button className="!py-0.5" onClick={() => toggleReaction('like')}>
       {activeReactions.has('like') ? 'unlike' : 'like'}
     </Button>
-  );
-};
+  )
+}
 
-const App = () => {
+function App() {
   return (
     <CommentsProvider
       supabaseClient={supabase}
@@ -201,8 +228,8 @@ const App = () => {
     >
       <Comments topic="custom-reactions" />
     </CommentsProvider>
-  );
-};
+  )
+}
 ```
 
 The above code will render the following ui
@@ -249,77 +276,51 @@ Here's the prop options for primary components you'll be working with
 
 ```tsx
 interface CommentsProviderProps {
-  queryClient?: QueryClient;
-  supabaseClient: SupabaseClient;
-  onAuthRequested?: () => void;
-  onUserClick?: (user: DisplayUser) => void;
-  mode?: 'light' | 'dark';
-  accentColor?: string;
-  onError?: (error: ApiError, query: Query) => void;
+  queryClient?: QueryClient
+  supabaseClient: SupabaseClient
+  onAuthRequested?: () => void
+  onUserClick?: (user: DisplayUser) => void
+  mode?: 'light' | 'dark'
+  accentColor?: string
+  onError?: (error: ApiError, query: Query) => void
   components?: {
     CommentReactions?: ComponentType<{
-      activeReactions: Set<string>;
-      reactionsMetadata: api.CommentReactionMetadata[];
-      toggleReaction: (reactionType: string) => void;
-    }>;
-  };
-  enableMentions?: boolean;
+      activeReactions: Set<string>
+      reactionsMetadata: api.CommentReactionMetadata[]
+      toggleReaction: (reactionType: string) => void
+    }>
+  }
+  enableMentions?: boolean
 }
 
 interface CommentsProps {
-  topic: string;
+  topic: string
 }
 
 interface AuthModalProps extends AuthProps {
-  visible: boolean;
-  onClose?: () => void;
-  onAuthenticate?: (session: Session) => void;
-  title?: string;
-  description?: string;
+  visible: boolean
+  onClose?: () => void
+  onAuthenticate?: (session: Session) => void
+  title?: string
+  description?: string
 }
 
 // This comes from @supabase/ui (https://ui.supabase.io/components/auth)
 // supabase-comments-x provides an adapted version of supabase ui's
 // Auth component with support for display names/avatars
 interface AuthProps {
-  supabaseClient: SupabaseClient;
-  className?: string;
-  children?: React.ReactNode;
-  style?: React.CSSProperties;
-  socialLayout?: 'horizontal' | 'vertical';
-  socialColors?: boolean;
-  socialButtonSize?: 'tiny' | 'small' | 'medium' | 'large' | 'xlarge';
-  providers?: Provider[];
-  verticalSocialLayout?: any;
-  view?: ViewType;
-  redirectTo?: RedirectTo;
-  onlyThirdPartyProviders?: boolean;
-  magicLink?: boolean;
+  supabaseClient: SupabaseClient
+  className?: string
+  children?: React.ReactNode
+  style?: React.CSSProperties
+  socialLayout?: 'horizontal' | 'vertical'
+  socialColors?: boolean
+  socialButtonSize?: 'tiny' | 'small' | 'medium' | 'large' | 'xlarge'
+  providers?: Provider[]
+  verticalSocialLayout?: any
+  view?: ViewType
+  redirectTo?: RedirectTo
+  onlyThirdPartyProviders?: boolean
+  magicLink?: boolean
 }
 ```
-
-<!--
-In addition, supabase-comments-x exports a bunch of lower level building blocks which you may or may not need
-
-```jsx
-// components
-Avatar
-Comment
-CommentReaction
-CommentReactions
-Reaction
-ReactionSelector
-// hooks
-useComment
-useComments
-useAddComment
-useUpdateComment
-useDeleteComment
-useReaction
-useReactions
-useAddReaction
-useRemoveReaction
-useCommentReactions
-useSearchUsers
-useUser
-``` -->
