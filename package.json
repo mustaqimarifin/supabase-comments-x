@@ -1,6 +1,6 @@
 {
   "name": "supabase-comments-x",
-  "type": "module", "version": "0.1.6",
+  "type": "module", "version": "0.1.7",
   "description": "Comments powered by React Query and Supabase",
   "author": "Mustaqim Arifin <mustaqim.arifin@gmail.com>",
   "license": "MIT",
@@ -35,11 +35,10 @@
   "bin": {"supabase-comments-x": "bin/script.js"},
   "files": ["bin", "dist"],
   "scripts": {
-    "clean"     : "rimraf dist/"                                       ,
-    "copy-files": "copyfiles -u 1 lib/**/*.css dist/"                  ,
+    "clean": "rimraf dist/", "copy-files": "copyfiles -u 1 lib/**/*.css dist/",
     "build": "bun clean && tsc && bun copy-files",
-    "lint"      : "eslint . --fix --cache --cache-location eslintcache",
-    "format"    : "bun prettier --write . --ignore-path .gitignore"    ,
+    "lint"  : "eslint . --fix --cache --cache-location eslintcache",
+    "format": "bun prettier --write . --ignore-path .gitignore",
     "fix": "bun format && bun lint",
     "ci:version": "changeset version",
     "ci:release": "changeset publish"
@@ -60,9 +59,11 @@
     "@tiptap/starter-kit"      : "2.5.5"  ,
     "@tiptap/suggestion"       : "2.5.5"  ,
     "@types/traverse"          : "^0.6.37",
+    "react-image"              : "^4.1.0" ,
+    "supalazy"                 : "^1.0.6" ,
     "tinycolor2"               : "1.6.0",
     "tippy.js": "^6.3.7",
-    "traverse": "^0.6.9", "supalazy": "^1.0.6"
+    "traverse": "^0.6.9"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.23.2",
