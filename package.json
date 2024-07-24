@@ -1,6 +1,7 @@
 {
   "name": "supabase-comments-x",
-  "type": "module", "version": "0.1.7",
+  "type": "module",
+  "version": "0.1.8",
   "description": "Comments powered by React Query and Supabase",
   "author": "Mustaqim Arifin <mustaqim.arifin@gmail.com>",
   "license": "MIT",
@@ -23,7 +24,7 @@
       "types": "./dist/components/AuthModal.d.ts",
       "default": "./dist/components/AuthModal.js"
     },
-    "./styles": {"default": "./dist/style.css"},
+    "./styles": { "default": "./dist/style.css" },
     "./dist/*": "./dist/*"
   },
   "main": "dist/index.js",
@@ -32,12 +33,13 @@
   "typesVersions": {
     "*": { "*": ["./dist/*", "./dist/index.d.ts"] }
   },
-  "bin": {"supabase-comments-x": "bin/script.js"},
+  "bin": { "supabase-comments-x": "bin/script.js" },
   "files": ["bin", "dist"],
   "scripts": {
-    "clean": "rimraf dist/", "copy-files": "copyfiles -u 1 lib/**/*.css dist/",
+    "clean": "rimraf dist/",
+    "copy-files": "copyfiles -u 1 lib/**/*.css dist/",
     "build": "bun clean && tsc && bun copy-files",
-    "lint"  : "eslint . --fix --cache --cache-location eslintcache",
+    "lint": "eslint . --fix --cache --cache-location eslintcache",
     "format": "bun prettier --write . --ignore-path .gitignore",
     "fix": "bun format && bun lint",
     "ci:version": "changeset version",
@@ -46,22 +48,24 @@
   "peerDependencies": {
     "@supabase/supabase-js": "^2.44.4",
     "@tanstack/react-query": "^5.51.11",
-    "postcss": "8.4.39", "react": "^18.3.1", "react-dom": "^18.3.1",
+    "postcss": "8.4.39",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "tailwindcss": "3.4.6"
   },
   "dependencies": {
-    "@formkit/auto-animate"    : "^0.8.2" ,
-    "@tiptap/extension-image"  : "^2.5.5" ,
-    "@tiptap/extension-link"   : "2.5.5"  ,
-    "@tiptap/extension-mention": "^2.5.5" ,
-    "@tiptap/pm"               : "^2.5.5" ,
-    "@tiptap/react"            : "2.5.5"  ,
-    "@tiptap/starter-kit"      : "2.5.5"  ,
-    "@tiptap/suggestion"       : "2.5.5"  ,
-    "@types/traverse"          : "^0.6.37",
-    "react-image"              : "^4.1.0" ,
-    "supalazy"                 : "^1.0.6" ,
-    "tinycolor2"               : "1.6.0",
+    "@formkit/auto-animate": "^0.8.2",
+    "@tiptap/extension-image": "^2.5.5",
+    "@tiptap/extension-link": "2.5.5",
+    "@tiptap/extension-mention": "^2.5.5",
+    "@tiptap/pm": "^2.5.5",
+    "@tiptap/react": "2.5.5",
+    "@tiptap/starter-kit": "2.5.5",
+    "@tiptap/suggestion": "2.5.5",
+    "@types/traverse": "^0.6.37",
+    "react-image": "^4.1.0",
+    "supalazy": "1.0.7",
+    "tinycolor2": "1.6.0",
     "tippy.js": "^6.3.7",
     "traverse": "^0.6.9"
   },
@@ -69,7 +73,7 @@
     "@antfu/eslint-config": "^2.23.2",
     "@changesets/cli": "^2.27.7",
     "@eslint-react/eslint-plugin": "^1.5.30",
-    "@types/node": "^20.14.11",
+    "@types/node": "^20.14.12",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@types/tinycolor2": "^1.4.6",
@@ -85,6 +89,6 @@
     "tslib": "^2.6.3",
     "typescript": "^5.5.4"
   },
-  "release"      : { "branches": ["main"]                     },
-  "publishConfig": {                       "access": "public" }
+  "release": { "branches": ["main"] },
+  "publishConfig": { "access": "public" }
 }

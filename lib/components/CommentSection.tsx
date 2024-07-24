@@ -5,7 +5,7 @@ import { createContext, useContext, useEffect, useMemo, useRef, useState } from 
 // import sty from './Comment.module.css'
 // import av from './Avatar.module.css'
 
-import { Button, Dropdown, Loading, Typography, Modal, Image } from 'supalazy'
+import { Button, Dropdown, Loading, Typography, Modal, Image, AltButton } from 'supalazy'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import {
   useAddComment,
@@ -489,6 +489,7 @@ function Comments({ topic, parent_id }: CommentsProps) {
                           handleCommentCreate(commentState.value)
                         })
                       }}
+                      type="secondary"
                       size="tiny"
                       className="!px-[6px] !py-[3px] m-[3px]"
                       disabled={

@@ -1,6 +1,6 @@
 import { type ComponentProps } from 'react';
 import type { Session } from '@supabase/supabase-js';
-import Auth from './Auth.js';
+import { Auth } from 'supalazy';
 export interface AuthModalProps extends Omit<ComponentProps<typeof Auth>, 'supabaseClient'> {
     visible: boolean;
     onClose: () => void;

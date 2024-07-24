@@ -651,7 +651,7 @@ video {
   border: none !important;
   outline: none !important;
 }
-.scx-comments .sbui-loading-spinner {
+.scx-comments .scx-loading-spinner {
   color: var(--scx-accent-400) !important;
 }
 .tiptap-editor .mention {
@@ -1071,17 +1071,17 @@ video {
     background-color: rgba(255, 255, 255, var(--tw-bg-opacity));
   }
 }
-.tiptap-editor .sbui-btn:disabled {
+.tiptap-editor .scx-btn:disabled {
   opacity: 0.66;
 }
-.tiptap-editor .sbui-btn-primary {
+.tiptap-editor .scx-btn-primary {
   background-color: var(--scx-accent-500) !important;
   color: var(--scx-accent-50) !important;
 }
-.tiptap-editor .sbui-btn-primary:hover {
+.tiptap-editor .scx-btn-primary:hover {
   background-color: var(--scx-accent-400) !important;
 }
-.dark .tiptap-editor .sbui-btn-primary:hover {
+.dark .tiptap-editor .scx-btn-primary:hover {
   background-color: var(--scx-accent-600) !important;
 }
 @media (prefers-color-scheme: dark) {

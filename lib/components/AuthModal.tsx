@@ -1,10 +1,10 @@
 import { type ComponentProps, type MutableRefObject, useEffect, useRef } from 'react'
 import type { Session } from '@supabase/supabase-js'
-import { Modal } from 'supalazy'
+import { Auth, Modal } from 'supalazy'
 
 import { cx } from '../utils.js'
 import { useSupabaseClient } from './CommentsProvider.js'
-import Auth from './Auth.js'
+//import Auth from './Auth.js'
 
 /**
  * React hook to persist any value between renders,
@@ -31,7 +31,7 @@ function AuthModal({
   visible,
   onAuthenticate,
   onClose,
-  title = 'Please Sign In',
+  title = '',
   description,
   className,
   ...otherProps

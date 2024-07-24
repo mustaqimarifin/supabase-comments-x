@@ -1,5 +1,5 @@
 const config = {
-  darkMode: ['media'],
+  //darkMode: ['class'],
   content: ['./lib/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {},
